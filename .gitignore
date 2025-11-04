@@ -1,0 +1,77 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env.local
+.env
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Database
+*.db
+*.db-journal
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# Temporary folders
+tmp/
+temp/
+
+# Production
+npm-shrinkwrap.json
+package-lock.json
+yarn.lock
+
+# Supabase
+supabase/
+
+# Oracle OCI credentials (never commit these!)
+oracle_credentials.json
+oci-config
+oci_private_key.pem
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build outputs
+public/build/
+static/build/
+build-manifest.json
+react-loadable-manifest.json
+
+# Serverless
+.serverless/
+
+# System Files
+.DS_Store
+Thumbs.db

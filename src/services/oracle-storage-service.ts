@@ -19,14 +19,14 @@ export class OracleStorageService {
   
   constructor() {
     this.config = {
-      tenancyId: process.env.ORACLE_TENANCY_ID || '',
-      userId: process.env.ORACLE_USER_ID || '',
-      compartmentId: process.env.ORACLE_COMPARTMENT_ID || '',
-      region: process.env.ORACLE_REGION || '',
-      fingerprint: process.env.ORACLE_FINGERPRINT || '',
-      privateKey: process.env.ORACLE_PRIVATE_KEY_PATH || '',
-      namespace: process.env.ORACLE_NAMESPACE || 'idtwbqlbwvkt', // Normalmente el namespace se genera automáticamente
-      bucketName: process.env.ORACLE_BUCKET_NAME || 'nuamana-storage',
+      tenancyId: process.env.NEXT_PUBLIC_ORACLE_TENANCY_ID || '',
+      userId: process.env.NEXT_PUBLIC_ORACLE_USER_ID || '',
+      compartmentId: process.env.NEXT_PUBLIC_ORACLE_COMPARTMENT_ID || '',
+      region: process.env.NEXT_PUBLIC_ORACLE_REGION || '',
+      fingerprint: process.env.NEXT_PUBLIC_ORACLE_FINGERPRINT || '',
+      privateKey: process.env.ORACLE_PRIVATE_KEY || '',
+      namespace: process.env.NEXT_PUBLIC_ORACLE_NAMESPACE || 'idtwbqlbwvkt', // Normalmente el namespace se genera automáticamente
+      bucketName: process.env.NEXT_PUBLIC_ORACLE_BUCKET_NAME || 'nuamana-storage',
     };
     
     // Validar que las variables de entorno estén presentes
@@ -45,7 +45,7 @@ export class OracleStorageService {
     
     for (const field of requiredFields) {
       if (!this.config[field as keyof StorageConfig]) {
-        throw new Error(`Falta la variable de entorno requerida: ORACLE_${field.toUpperCase()}`);
+        throw new Error(`Falta la variable de entorno requerida: NEXT_PUBLIC_ORACLE_${field.toUpperCase()}`);
       }
     }
   }
@@ -63,7 +63,7 @@ export class OracleStorageService {
     // Este es un placeholder que simula la funcionalidad
     console.log(`Subiendo archivo: ${fileName} a Oracle Cloud Storage`);
     
-    // URL simulada del archivo subido
+    // Simular respuesta exitosa después de subir a Oracle Cloud
     return `https://${this.config.namespace}.compat.objectstorage.${this.config.region}.oraclecloud.com/n/${this.config.namespace}/b/${this.config.bucketName}/o/${encodeURIComponent(fileName)}`;
   }
   

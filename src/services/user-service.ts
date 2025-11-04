@@ -1,5 +1,6 @@
 import { supabase } from '@/services/supabase';
 import { User } from '@/types';
+import { uploadImage } from '@/services/image-service';
 
 export const getAllUsers = async (): Promise<User[]> => {
   const { data, error } = await supabase
