@@ -1,0 +1,8 @@
+NEXT_PUBLIC_SUPABASE_URL=https://yvfbmbqpefpakqctgwre.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2ZmJtYnFwZWZwYWtxY3Rnd3JlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyODM4MjksImV4cCI6MjA3Nzg1OTgyOX0.j8y4m64n34MesTfqulvUKnhzPL0AV18RJGR1oVfhGGk
+ORACLE_TENANCY_ID=<Tu ID de tenant de Oracle>
+ORACLE_USER_ID=<Tu ID de usuario de Oracle>
+ORACLE_COMPARTMENT_ID=<Tu ID de compartment de Oracle>
+ORACLE_REGION=<Tu región de Oracle>
+ORACLE_FINGERPRINT=<Tu fingerprint de Oracle>
+ORACLE_PRIVATE_KEY_PATH=<Ruta a tu clave privada>
