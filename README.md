@@ -1,6 +1,3 @@
-# Guías y Scouts Nua Mana
-App PWA para Guías y Scouts Nua Mana
-
 # Plataforma Nua Mana - Guías y Scouts
 
 ## Descripción General
