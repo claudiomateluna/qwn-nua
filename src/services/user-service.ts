@@ -1,8 +1,15 @@
+// Servicio para manejar usuarios en la base de datos de Supabase
+// Almacenamiento de archivos e imágenes se maneja por separado en Oracle Cloud
+
 import { supabase } from '@/services/supabase';
 import { User } from '@/types';
-import { uploadImage } from '@/services/image-service';
+import { uploadFileToStorage } from '@/services/storage-service';
 
-export const getAllUsers = async (): Promise<User[]> => {
+/**
+ * Obtiene todos los usuarios de la base de datos
+ * @returns Array de usuarios
+ */
+export async function getAllUsers(): Promise<User[]> {
   const { data, error } = await supabase
     .from('users')
     .select('*')
@@ -14,9 +21,14 @@ export const getAllUsers = async (): Promise<User[]> => {
   }
 
   return data as User[];
-};
+}
 
-export const getUserById = async (id: string): Promise<User | null> => {
+/**
+ * Obtiene un usuario por ID
+ * @param id ID del usuario
+ * @returns Usuario o null si no se encuentra
+ */
+export async function getUserById(id: string): Promise<User | null> {
   const { data, error } = await supabase
     .from('users')
     .select('*')
@@ -25,7 +37,7 @@ export const getUserById = async (id: string): Promise<User | null> => {
 
   if (error) {
     if (error.code === 'PGRST116') {
-      // Record not found
+      // No se encontró el registro
       return null;
     }
     console.error('Error fetching user:', error);
@@ -33,9 +45,14 @@ export const getUserById = async (id: string): Promise<User | null> => {
   }
 
   return data as User;
-};
+}
 
-export const createUser = async (userData: Omit<User, 'id' | 'created_at' | 'updated_at'>): Promise<User> => {
+/**
+ * Crea un nuevo usuario
+ * @param userData Datos del usuario a crear
+ * @returns Usuario creado
+ */
+export async function createUser(userData: Omit<User, 'id' | 'created_at' | 'updated_at'>): Promise<User> {
   const { data, error } = await supabase
     .from('users')
     .insert([userData])
@@ -48,9 +65,15 @@ export const createUser = async (userData: Omit<User, 'id' | 'created_at' | 'upd
   }
 
   return data as User;
-};
+}
 
-export const updateUser = async (id: string, userData: Partial<User>): Promise<User> => {
+/**
+ * Actualiza un usuario existente
+ * @param id ID del usuario
+ * @param userData Datos a actualizar
+ * @returns Usuario actualizado
+ */
+export async function updateUser(id: string, userData: Partial<User>): Promise<User> {
   const { data, error } = await supabase
     .from('users')
     .update(userData)
@@ -64,9 +87,13 @@ export const updateUser = async (id: string, userData: Partial<User>): Promise<U
   }
 
   return data as User;
-};
+}
 
-export const deleteUser = async (id: string): Promise<void> => {
+/**
+ * Elimina un usuario
+ * @param id ID del usuario
+ */
+export async function deleteUser(id: string): Promise<void> {
   const { error } = await supabase
     .from('users')
     .delete()
@@ -76,13 +103,14 @@ export const deleteUser = async (id: string): Promise<void> => {
     console.error('Error deleting user:', error);
     throw new Error(error.message);
   }
-};
+}
 
-export const searchUsers = async (searchTerm: string): Promise<User[]> => {
-  if (!searchTerm) {
-    return getAllUsers();
-  }
-
+/**
+ * Busca usuarios por término de búsqueda
+ * @param searchTerm Término de búsqueda
+ * @returns Array de usuarios coincidentes
+ */
+export async function searchUsers(searchTerm: string): Promise<User[]> {
   const { data, error } = await supabase
     .from('users')
     .select('*')
@@ -95,4 +123,52 @@ export const searchUsers = async (searchTerm: string): Promise<User[]> => {
   }
 
   return data as User[];
-};
+}
+
+/**
+ * Sube la imagen de perfil del usuario a Oracle Cloud y actualiza el registro
+ * @param userId ID del usuario
+ * @param imageFile Archivo de imagen
+ * @returns URL de la imagen subida
+ */
+export async function uploadUserImage(userId: string, imageFile: File): Promise<string> {
+  // Validar que el archivo sea una imagen
+  if (!imageFile.type.startsWith('image/')) {
+    throw new Error('El archivo no es una imagen válida');
+  }
+
+  // Subir la imagen a Oracle Cloud Storage
+  const uploadResult = await uploadFileToStorage(imageFile, 'user-images');
+  
+  // Actualizar el campo image_url en el registro del usuario
+  await updateUser(userId, { image_url: uploadResult.url });
+
+  return uploadResult.url;
+}
+
+/**
+ * Sube la imagen de portada de un artículo a Oracle Cloud
+ * @param articleId ID del artículo
+ * @param imageFile Archivo de imagen
+ * @returns URL de la imagen subida
+ */
+export async function uploadArticleCoverImage(articleId: string, imageFile: File): Promise<string> {
+  if (!imageFile.type.startsWith('image/')) {
+    throw new Error('El archivo no es una imagen válida');
+  }
+
+  const uploadResult = await uploadFileToStorage(imageFile, 'article-covers');
+  
+  // Actualizar el artículo con la nueva URL de imagen de portada
+  const { error } = await supabase
+    .from('articles')
+    .update({ cover_image_url: uploadResult.url })
+    .eq('id', articleId);
+
+  if (error) {
+    console.error('Error updating article cover image:', error);
+    throw new Error(error.message);
+  }
+
+  return uploadResult.url;
+}

@@ -1,40 +1,35 @@
+// Servicio para manejar acciones en las actas
+// Almacenamiento de archivos e imágenes se maneja por separado en Oracle Cloud
+
 import { supabase } from '@/services/supabase';
 import { Accion } from '@/types';
 
-export const getAllAcciones = async (): Promise<Accion[]> => {
+/**
+ * Obtiene todas las acciones de una acta específica
+ * @param actaId ID de la acta
+ * @returns Array de acciones
+ */
+export async function getAllAcciones(actaId: string): Promise<Accion[]> {
   const { data, error } = await supabase
     .from('acciones')
     .select('*')
-    .order('created_at', { ascending: false });
+    .eq('acta_id', actaId)
+    .order('created_at', { ascending: true });
 
   if (error) {
-    console.error('Error fetching actions:', error);
+    console.error('Error fetching acciones:', error);
     throw new Error(error.message);
   }
 
   return data as Accion[];
-};
+}
 
-export const getAccionById = async (id: string): Promise<Accion | null> => {
-  const { data, error } = await supabase
-    .from('acciones')
-    .select('*')
-    .eq('id', id)
-    .single();
-
-  if (error) {
-    if (error.code === 'PGRST116') {
-      // Record not found
-      return null;
-    }
-    console.error('Error fetching action:', error);
-    throw new Error(error.message);
-  }
-
-  return data as Accion;
-};
-
-export const createAccion = async (accionData: Omit<Accion, 'id' | 'created_at' | 'updated_at'>): Promise<Accion> => {
+/**
+ * Crea una nueva acción
+ * @param accionData Datos de la acción a crear
+ * @returns Acción creada
+ */
+export async function createAccion(accionData: Omit<Accion, 'id' | 'created_at' | 'updated_at'>): Promise<Accion> {
   const { data, error } = await supabase
     .from('acciones')
     .insert([accionData])
@@ -42,14 +37,20 @@ export const createAccion = async (accionData: Omit<Accion, 'id' | 'created_at' 
     .single();
 
   if (error) {
-    console.error('Error creating action:', error);
+    console.error('Error creating accion:', error);
     throw new Error(error.message);
   }
 
   return data as Accion;
-};
+}
 
-export const updateAccion = async (id: string, accionData: Partial<Accion>): Promise<Accion> => {
+/**
+ * Actualiza una acción existente
+ * @param id ID de la acción
+ * @param accionData Datos a actualizar
+ * @returns Acción actualizada
+ */
+export async function updateAccion(id: string, accionData: Partial<Accion>): Promise<Accion> {
   const { data, error } = await supabase
     .from('acciones')
     .update(accionData)
@@ -58,40 +59,25 @@ export const updateAccion = async (id: string, accionData: Partial<Accion>): Pro
     .single();
 
   if (error) {
-    console.error('Error updating action:', error);
+    console.error('Error updating accion:', error);
     throw new Error(error.message);
   }
 
   return data as Accion;
-};
+}
 
-export const deleteAccion = async (id: string): Promise<void> => {
+/**
+ * Elimina una acción
+ * @param id ID de la acción
+ */
+export async function deleteAccion(id: string): Promise<void> {
   const { error } = await supabase
     .from('acciones')
     .delete()
     .eq('id', id);
 
   if (error) {
-    console.error('Error deleting action:', error);
+    console.error('Error deleting accion:', error);
     throw new Error(error.message);
   }
-};
-
-export const searchAcciones = async (searchTerm: string): Promise<Accion[]> => {
-  if (!searchTerm) {
-    return getAllAcciones();
-  }
-
-  const { data, error } = await supabase
-    .from('acciones')
-    .select('*')
-    .or(`titulo.ilike.%${searchTerm}%,descripcion.ilike.%${searchTerm}%`)
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('Error searching actions:', error);
-    throw new Error(error.message);
-  }
-
-  return data as Accion[];
-};
+}

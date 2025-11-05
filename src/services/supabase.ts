@@ -1,12 +1,11 @@
+// Configuración del cliente de Supabase
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+// Tipos para TypeScript
+export type { Session, User } from '@supabase/supabase-js';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
-
-// Cliente de Supabase configurado para base de datos y autenticación
-// El almacenamiento de archivos se maneja por separado en Oracle Cloud Infrastructure
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Inicializar el cliente de Supabase
+export const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);

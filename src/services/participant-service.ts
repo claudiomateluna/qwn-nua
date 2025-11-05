@@ -1,11 +1,20 @@
+// Servicio para manejar participantes en las actas
+// Almacenamiento de archivos e imágenes se maneja por separado en Oracle Cloud
+
 import { supabase } from '@/services/supabase';
 import { Participante } from '@/types';
 
-export const getAllParticipants = async (): Promise<Participante[]> => {
+/**
+ * Obtiene todos los participantes de una acta específica
+ * @param actaId ID de la acta
+ * @returns Array de participantes
+ */
+export async function getAllParticipants(actaId: string): Promise<Participante[]> {
   const { data, error } = await supabase
     .from('participantes')
     .select('*')
-    .order('created_at', { ascending: false });
+    .eq('acta_id', actaId)
+    .order('name', { ascending: true });
 
   if (error) {
     console.error('Error fetching participants:', error);
@@ -13,28 +22,14 @@ export const getAllParticipants = async (): Promise<Participante[]> => {
   }
 
   return data as Participante[];
-};
+}
 
-export const getParticipantById = async (id: string): Promise<Participante | null> => {
-  const { data, error } = await supabase
-    .from('participantes')
-    .select('*')
-    .eq('id', id)
-    .single();
-
-  if (error) {
-    if (error.code === 'PGRST116') {
-      // Record not found
-      return null;
-    }
-    console.error('Error fetching participant:', error);
-    throw new Error(error.message);
-  }
-
-  return data as Participante;
-};
-
-export const createParticipant = async (participantData: Omit<Participante, 'id' | 'created_at' | 'updated_at'>): Promise<Participante> => {
+/**
+ * Crea un nuevo participante
+ * @param participantData Datos del participante a crear
+ * @returns Participante creado
+ */
+export async function createParticipant(participantData: Omit<Participante, 'id' | 'created_at' | 'updated_at'>): Promise<Participante> {
   const { data, error } = await supabase
     .from('participantes')
     .insert([participantData])
@@ -47,9 +42,15 @@ export const createParticipant = async (participantData: Omit<Participante, 'id'
   }
 
   return data as Participante;
-};
+}
 
-export const updateParticipant = async (id: string, participantData: Partial<Participante>): Promise<Participante> => {
+/**
+ * Actualiza un participante existente
+ * @param id ID del participante
+ * @param participantData Datos a actualizar
+ * @returns Participante actualizado
+ */
+export async function updateParticipant(id: string, participantData: Partial<Participante>): Promise<Participante> {
   const { data, error } = await supabase
     .from('participantes')
     .update(participantData)
@@ -63,9 +64,13 @@ export const updateParticipant = async (id: string, participantData: Partial<Par
   }
 
   return data as Participante;
-};
+}
 
-export const deleteParticipant = async (id: string): Promise<void> => {
+/**
+ * Elimina un participante
+ * @param id ID del participante
+ */
+export async function deleteParticipant(id: string): Promise<void> {
   const { error } = await supabase
     .from('participantes')
     .delete()
@@ -75,23 +80,4 @@ export const deleteParticipant = async (id: string): Promise<void> => {
     console.error('Error deleting participant:', error);
     throw new Error(error.message);
   }
-};
-
-export const searchParticipants = async (searchTerm: string): Promise<Participante[]> => {
-  if (!searchTerm) {
-    return getAllParticipants();
-  }
-
-  const { data, error } = await supabase
-    .from('participantes')
-    .select('*')
-    .or(`nombre.ilike.%${searchTerm}%,email.ilike.%${searchTerm}%`)
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('Error searching participants:', error);
-    throw new Error(error.message);
-  }
-
-  return data as Participante[];
-};
+}

@@ -1,10 +1,20 @@
+// Servicio para manejar transacciones financieras
+// Almacenamiento de archivos e imágenes se maneja por separado en Oracle Cloud
+
 import { supabase } from '@/services/supabase';
 import { Transaction } from '@/types';
 
-export const getAllTransactions = async (): Promise<Transaction[]> => {
+/**
+ * Obtiene todas las transacciones
+ * @returns Array de transacciones
+ */
+export async function getAllTransactions(): Promise<Transaction[]> {
   const { data, error } = await supabase
     .from('transactions')
-    .select('*')
+    .select(`
+      *,
+      users (first_name, paternal_last_name)
+    `)
     .order('date', { ascending: false });
 
   if (error) {
@@ -13,28 +23,14 @@ export const getAllTransactions = async (): Promise<Transaction[]> => {
   }
 
   return data as Transaction[];
-};
+}
 
-export const getTransactionById = async (id: string): Promise<Transaction | null> => {
-  const { data, error } = await supabase
-    .from('transactions')
-    .select('*')
-    .eq('id', id)
-    .single();
-
-  if (error) {
-    if (error.code === 'PGRST116') {
-      // Record not found
-      return null;
-    }
-    console.error('Error fetching transaction:', error);
-    throw new Error(error.message);
-  }
-
-  return data as Transaction;
-};
-
-export const createTransaction = async (transactionData: Omit<Transaction, 'id' | 'created_at' | 'updated_at'>): Promise<Transaction> => {
+/**
+ * Crea una nueva transacción
+ * @param transactionData Datos de la transacción a crear
+ * @returns Transacción creada
+ */
+export async function createTransaction(transactionData: Omit<Transaction, 'id' | 'created_at' | 'updated_at'>): Promise<Transaction> {
   const { data, error } = await supabase
     .from('transactions')
     .insert([transactionData])
@@ -47,9 +43,15 @@ export const createTransaction = async (transactionData: Omit<Transaction, 'id' 
   }
 
   return data as Transaction;
-};
+}
 
-export const updateTransaction = async (id: string, transactionData: Partial<Transaction>): Promise<Transaction> => {
+/**
+ * Actualiza una transacción existente
+ * @param id ID de la transacción
+ * @param transactionData Datos a actualizar
+ * @returns Transacción actualizada
+ */
+export async function updateTransaction(id: string, transactionData: Partial<Transaction>): Promise<Transaction> {
   const { data, error } = await supabase
     .from('transactions')
     .update(transactionData)
@@ -63,9 +65,13 @@ export const updateTransaction = async (id: string, transactionData: Partial<Tra
   }
 
   return data as Transaction;
-};
+}
 
-export const deleteTransaction = async (id: string): Promise<void> => {
+/**
+ * Elimina una transacción
+ * @param id ID de la transacción
+ */
+export async function deleteTransaction(id: string): Promise<void> {
   const { error } = await supabase
     .from('transactions')
     .delete()
@@ -75,23 +81,4 @@ export const deleteTransaction = async (id: string): Promise<void> => {
     console.error('Error deleting transaction:', error);
     throw new Error(error.message);
   }
-};
-
-export const searchTransactions = async (searchTerm: string): Promise<Transaction[]> => {
-  if (!searchTerm) {
-    return getAllTransactions();
-  }
-
-  const { data, error } = await supabase
-    .from('transactions')
-    .select('*')
-    .or(`description.ilike.%${searchTerm}%,category.ilike.%${searchTerm}%`)
-    .order('date', { ascending: false });
-
-  if (error) {
-    console.error('Error searching transactions:', error);
-    throw new Error(error.message);
-  }
-
-  return data as Transaction[];
-};
+}
