@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { 
@@ -22,10 +22,11 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useSearchParams } from 'next/navigation';
 import { Participante as ParticipanteType } from '@/types';
 import { getAllParticipants, createParticipant, updateParticipant, deleteParticipant } from '@/services/participant-service';
 
-export default function ParticipantsPage() {
+const ParticipantsContent = () => {
   const [participants, setParticipants] = useState<ParticipanteType[]>([]);
   const [filteredParticipants, setFilteredParticipants] = useState<ParticipanteType[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -43,9 +44,14 @@ export default function ParticipantsPage() {
     asistencia: 'Confirmado'
   });
 
+  const searchParams = useSearchParams();
+  const actaId = searchParams.get('actaId');
+
   useEffect(() => {
-    fetchParticipants();
-  }, []);
+    if (actaId) {
+      fetchParticipants(actaId);
+    }
+  }, [actaId]);
 
   useEffect(() => {
     // Filter participants based on search term
@@ -61,10 +67,10 @@ export default function ParticipantsPage() {
     }
   }, [searchTerm, participants]);
 
-  const fetchParticipants = async () => {
+  const fetchParticipants = async (id: string) => {
     try {
       setLoading(true);
-      const data = await getAllParticipants();
+      const data = await getAllParticipants(id);
       setParticipants(data);
       setFilteredParticipants(data);
     } catch (error) {
@@ -105,10 +111,8 @@ export default function ParticipantsPage() {
         asistencia: 'Confirmado'
       });
       setEditingParticipant(null);
-      setOpen(false);
-      
       // Refresh participant list
-      fetchParticipants();
+      if (actaId) fetchParticipants(actaId);
     } catch (error) {
       console.error('Error saving participant:', error);
     }
@@ -135,7 +139,7 @@ export default function ParticipantsPage() {
       await deleteParticipant(participantId);
       
       // Refresh participant list
-      fetchParticipants();
+      if (actaId) fetchParticipants(actaId);
     } catch (error) {
       console.error('Error deleting participant:', error);
     }
@@ -353,5 +357,13 @@ export default function ParticipantsPage() {
         </div>
       )}
     </div>
+  );
+};
+
+export default function ParticipantsPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center h-64"><div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div></div>}>
+      <ParticipantsContent />
+    </Suspense>
   );
 }

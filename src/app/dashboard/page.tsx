@@ -2,8 +2,9 @@
 
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/modern-button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import NuaManaNavbar from '@/components/nuamana-navbar';
 import { User, FileText, Package, Coins, FileInput, Trophy } from 'lucide-react';
 
 export default function Dashboard() {
@@ -16,79 +17,93 @@ export default function Dashboard() {
       description: "Gestiona usuarios y perfiles",
       icon: User as any,
       action: () => router.push('/dashboard/users'),
-      roleRequired: 'admin'
+      roleRequired: 'admin',
+      gradient: "from-[#2c3e50] to-[#ffc41d]"
     },
     {
       title: "Artículos",
       description: "Crea y gestiona contenido",
       icon: FileText,
       action: () => router.push('/dashboard/articles'),
-      roleRequired: 'admin'
+      roleRequired: 'admin',
+      gradient: "from-[#ffc41d] to-[#f39c12]"
     },
     {
       title: "Inventario",
       description: "Control de equipo y recursos",
       icon: Package,
       action: () => router.push('/dashboard/inventory'),
-      roleRequired: 'admin'
+      roleRequired: 'admin',
+      gradient: "from-[#e74c3c] to-[#c0392b]"
     },
     {
       title: "Tesorería",
       description: "Gestión financiera",
       icon: Coins,
       action: () => router.push('/dashboard/treasury'),
-      roleRequired: 'admin'
+      roleRequired: 'admin',
+      gradient: "from-[#2c3e50] to-[#34495e]"
     },
     {
       title: "Actas",
       description: "Actas de reuniones",
       icon: FileInput,
-      action: () => router.push('/dashboard/minutes'),
-      roleRequired: 'admin'
+      action: () => router.push('/dashboard/actas'),
+      roleRequired: 'admin',
+      gradient: "from-[#ffc41d] to-[#f39c12]"
     },
     {
       title: "Avances",
       description: "Seguimiento de progreso scout",
       icon: Trophy,
       action: () => router.push('/dashboard/progress'),
-      roleRequired: 'admin'
+      roleRequired: 'admin',
+      gradient: "from-[#e74c3c] to-[#cb2733]"
     }
   ];
 
   const filteredMenuItems = menuItems;
 
   return (
-    <div className="container mx-auto py-10">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">
-            Bienvenido a la plataforma de Nua Mana, {profile?.first_name} {profile?.paternal_last_name}
+    <div className="min-h-screen bg-background text-foreground">
+      <NuaManaNavbar />
+      
+      <main className="max-w-[1080px] mx-auto py-16 px-4 pt-20">
+        <div className="mb-12 text-center">
+          <h1 className="text-5xl font-bold text-[#2c3e50] mb-4 inika">Dashboard</h1>
+          <p className="text-2xl text-[#e74c3c]">
+            {profile?.first_name} {profile?.paternal_last_name}, ¡una nueva aventura te espera!
           </p>
         </div>
-        <Button variant="outline" onClick={signOut}>Cerrar Sesión</Button>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredMenuItems.map((item, index) => (
-          <Card key={index} className="cursor-pointer hover:shadow-lg transition-shadow" onClick={item.action}>
-            <CardHeader>
-              <div className="flex items-center gap-4">
-                <div className="p-2 rounded-lg bg-blue-100">
-                  <item.icon className="h-6 w-6 text-blue-600" />
-                </div>
-                <div>
-                  <CardTitle>{item.title}</CardTitle>
-                  <CardDescription>{item.description}</CardDescription>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full mx-auto">
+          {filteredMenuItems.map((item, index) => (
+            <Card 
+              key={index} 
+              className="cursor-pointer hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-[#2c3e50] shadow-xl bg-gradient-to-b from-white to-[#fffff0] rounded-2xl overflow-hidden"
+              onClick={item.action}
+            >
+              <div className={`bg-gradient-to-r ${item.gradient} p-6 text-white`}>
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-xl bg-white/30 backdrop-blur-sm">
+                    <item.icon className="h-8 w-8 text-[#2c3e50]" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-2xl text-white">{item.title}</CardTitle>
+                    <CardDescription className="text-white/90 mt-1">{item.description}</CardDescription>
+                  </div>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <Button className="w-full">Acceder</Button>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+              <CardContent className="pt-6 p-6">
+                <Button className="w-full bg-gradient-to-r from-[#2c3e50] to-[#ffc41d] hover:from-[#34495e] hover:to-[#e6b40d]">
+                  Acceder
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </main>
+      </div> {/* Close the max-w-[1080px] container */}
     </div>
   );
 }

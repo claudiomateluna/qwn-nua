@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { 
@@ -23,10 +23,11 @@ import {
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { useSearchParams } from 'next/navigation';
 import { Accion as AccionType } from '@/types';
 import { getAllAcciones, createAccion, updateAccion, deleteAccion } from '@/services/accion-service';
 
-export default function AccionesPage() {
+const AccionesContent = () => {
   const [acciones, setAcciones] = useState<AccionType[]>([]);
   const [filteredAcciones, setFilteredAcciones] = useState<AccionType[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -45,9 +46,14 @@ export default function AccionesPage() {
     estado: 'Abierta'
   });
 
+  const searchParams = useSearchParams();
+  const actaId = searchParams.get('actaId');
+
   useEffect(() => {
-    fetchAcciones();
-  }, []);
+    if (actaId) {
+      fetchAcciones(actaId);
+    }
+  }, [actaId]);
 
   useEffect(() => {
     // Filter acciones based on search term
@@ -63,10 +69,10 @@ export default function AccionesPage() {
     }
   }, [searchTerm, acciones]);
 
-  const fetchAcciones = async () => {
+  const fetchAcciones = async (id: string) => {
     try {
       setLoading(true);
-      const data = await getAllAcciones();
+      const data = await getAllAcciones(id);
       setAcciones(data);
       setFilteredAcciones(data);
     } catch (error) {
@@ -108,10 +114,8 @@ export default function AccionesPage() {
         estado: 'Abierta'
       });
       setEditingAccion(null);
-      setOpen(false);
-      
       // Refresh action list
-      fetchAcciones();
+      if (actaId) fetchAcciones(actaId);
     } catch (error) {
       console.error('Error saving action:', error);
     }
@@ -140,7 +144,7 @@ export default function AccionesPage() {
       await deleteAccion(accionId);
       
       // Refresh action list
-      fetchAcciones();
+      if (actaId) fetchAcciones(actaId);
     } catch (error) {
       console.error('Error deleting action:', error);
     }
@@ -382,5 +386,13 @@ export default function AccionesPage() {
         </div>
       )}
     </div>
+  );
+};
+
+export default function AccionesPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center h-64"><div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div></div>}>
+      <AccionesContent />
+    </Suspense>
   );
 }

@@ -1,3 +1,5 @@
+'use client';
+
 // Hook para manejar la autenticación de usuarios con Supabase
 // Este hook proporciona funciones para login, signup, logout y estado de autenticación
 
@@ -5,13 +7,16 @@ import { useState, useEffect, useContext, createContext, ReactNode } from 'react
 import { supabase } from '@/services/supabase';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 
+import { User } from '@/types';
+
 // Definir el tipo para el contexto de autenticación
 interface AuthContextType {
   user: SupabaseUser | null;
+  profile: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<{ error: any }>;
   signup: (email: string, password: string, firstName: string, lastName: string) => Promise<{ error: any }>;
-  logout: () => Promise<void>;
+  signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: any }>;
 }
 
@@ -21,6 +26,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // Proveedor del contexto de autenticación
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [profile, setProfile] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,12 +34,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       setUser(session?.user || null);
+      if (session?.user) {
+        const { data: userProfile } = await supabase.from('users').select('*').eq('id', session.user.id).single();
+        setProfile(userProfile as User);
+      }
       setLoading(false);
 
       // Escuchar cambios de autenticación
       const { data: { subscription } } = await supabase.auth.onAuthStateChange(
-        (_event, session) => {
+        async (_event, session) => {
           setUser(session?.user || null);
+          if (session?.user) {
+            const { data: userProfile } = await supabase.from('users').select('*').eq('id', session.user.id).single();
+            setProfile(userProfile as User);
+          }
           setLoading(false);
         }
       );
@@ -83,7 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // Función para cerrar sesión
-  const logout = async () => {
+  const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error('Error signing out:', error.message);
@@ -98,10 +112,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const value = {
     user,
+    profile,
     loading,
     login,
     signup,
-    logout,
+    signOut,
     resetPassword,
   };
 

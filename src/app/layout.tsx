@@ -1,9 +1,11 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Roboto_Slab, Inika } from 'next/font/google';
 import { ThemeProvider } from '@/components/providers/theme-provider';
+import { AuthProvider } from '@/hooks/use-auth';
 
-const inter = Inter({ subsets: ['latin'] });
+const robotoSlab = Roboto_Slab({ subsets: ['latin'] });
+const inika = Inika({ subsets: ['latin'], weight: ['400', '700'] });
 
 export const metadata: Metadata = {
   title: 'Nua Mana - Guías y Scouts',
@@ -16,16 +18,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es">
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+    <html lang="es" suppressHydrationWarning>
+      <body className={`${robotoSlab.className} ${inika.className}`} style={{ backgroundColor: 'var(--clr1)', color: 'var(--clr4)' }}>
+        <AuthProvider>
+          <ThemeProvider>
+            <div className="min-h-screen" style={{ backgroundColor: 'var(--clr1)', color: 'var(--clr4)' }}>
+              {children}
+            </div>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );
