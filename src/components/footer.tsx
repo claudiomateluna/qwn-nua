@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Instagram, Facebook, Youtube, Mail, MapPin, Phone, Clock } from 'lucide-react';
+import UnitSlideShow from './unit-slideshow';
 
 const NuaManaFooter = () => {
   return (
@@ -99,15 +100,10 @@ const NuaManaFooter = () => {
             </div>
           </div>
 
-          {/* Units combined - 25% width up to 1024px, becomes third column below 460px */}
+          {/* Units Slide Show - 25% width up to 1024px, becomes third column below 460px */}
           <div className="sm:col-span-1 lg:col-span-1 text-center sm:text-left">
             <h4 className="text-lg font-bold mb-4">NUESTRAS UNIDADES</h4>
-            <div className="space-y-2">
-              <p className="text-sm text-gray-300">Lobatos - 7 a 10 años</p>
-              <p className="text-sm text-gray-300">Tropa Scout - 11 a 14 años</p>
-              <p className="text-sm text-gray-300">Comunidad Scout - 15 a 17 años</p>
-              <p className="text-sm text-gray-300">Ruta - 18 a 21 años</p>
-            </div>
+            <UnitSlideShow />
           </div>
         </div>
 
