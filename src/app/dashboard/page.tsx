@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/modern-button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import NuaManaNavbar from '@/components/nuamana-navbar';
+import Navbar from '@/components/navbar';
 import { User, FileText, Package, Coins, FileInput, Trophy } from 'lucide-react';
 
 export default function Dashboard() {
@@ -66,7 +66,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <NuaManaNavbar />
+      <Navbar />
       
       <main className="max-w-[1080px] mx-auto py-16 px-4 pt-20">
         <div className="mb-12 text-center">

@@ -34,6 +34,8 @@ const SidebarDrawer = ({ isOpen, onClose }: SidebarDrawerProps) => {
 
   const menuItems = [
     { title: "Inicio", icon: Home, action: () => router.push('/') },
+    { title: "Acerca de", icon: Home, action: () => router.push('/acerca-de') },
+    { title: "Lo que hacemos", icon: Home, action: () => router.push('/lo-que-hacemos') },
   ];
 
   if (!isOpen) return null;

@@ -28,8 +28,8 @@ const NuaManaPublicNavbar = () => {
       <header
         aria-label="Encabezado de Sitio"
         className={`fixed top-0 left-0 right-0 w-full z-2 transition-all duration-300 ${
-          isScrolled 
-            ? 'bg-gradient-to-r from-[#1d1d1d] to-[#cb3327]/60 backdrop-blur-md shadow-xl p-0 m-0' 
+          isScrolled
+            ? 'bg-gradient-to-r from-[#1d1d1d] to-[#cb3327]/60 backdrop-blur-md shadow-xl p-0 m-0'
             : 'bg-transparent m-0 py-2'
         }`}
         >
@@ -93,7 +93,8 @@ const NuaManaPublicNavbar = () => {
                 <div className="flex items-center text-sm text-(--clr8)">Contactactanos</div>
               </div>
             </div>
-            {/* Fourth: Login */}
+
+            {/* Fifth: Login */}
             <div className="header-acceder flex items-center hidden lg:flex">
               <div className="flex items-center">
                 <a href="/auth/signin" className="bg-transparent text-(--clr8) hover:text-white text-base flex items-center">
