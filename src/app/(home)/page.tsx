@@ -9,6 +9,7 @@ import PublicNavbar from '@/components/public-navbar';
 import Hero from '@/components/hero';
 import Testimonials from '@/components/testimonials';
 import FAQ from '@/components/faq';
+import VisitSection from '@/components/visit-section';
 
 export default function HomePage() {
   const router = useRouter();
@@ -80,7 +81,7 @@ export default function HomePage() {
                       <CardTitle className="text-2xl text-[#e74c3c] bg-[#ffffffaa]">{item.title}</CardTitle>
                     </CardHeader>
                     <CardContent className="p-0 pt-4 text-center">
-                      <p className="text-(--clr3) bg-[#ffffffaa]">{item.description}</p>
+                      <p className="text-[var(--clr3)] bg-[#ffffffaa]">{item.description}</p>
                     </CardContent>
                   </div>
                 </Card>
@@ -92,6 +93,9 @@ export default function HomePage() {
 
       {/* Testimonials */}
       <Testimonials />
+
+      {/* Visit Section */}
+      <VisitSection />
 
       {/* FAQ Section */}
       <FAQ />

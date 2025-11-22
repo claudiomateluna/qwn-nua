@@ -45,22 +45,31 @@
 nuamana-pwa/
 ├── src/
 │   ├── app/                 # Next.js App Router pages
+│   │   ├── (home)/          # Home page route group
+│   │   ├── (public)/        # Public pages route group (acerca-de, lo-que-hacemos)
 │   │   ├── api/             # API routes
 │   │   ├── auth/            # Authentication pages
 │   │   ├── dashboard/       # Dashboard pages (users, articles, inventory, etc.)
 │   │   ├── globals.css      # Global styles
 │   │   ├── layout.tsx       # Root layout
+│   │   ├── main-layout.tsx  # Main application layout
 │   │   └── page.tsx         # Home page
 │   ├── components/          # Reusable UI components
 │   │   ├── auth/            # Authentication components
+│   │   ├── layouts/         # Specialized layout components
 │   │   ├── providers/       # Context providers
 │   │   ├── ui/              # UI primitives (buttons, cards, etc.)
-│   │   ├── app-layout.tsx   # Application layout
+│   │   ├── app-layout.tsx   # Application layout for protected routes
+│   │   ├── faq.tsx          # FAQ component
+│   │   ├── footer.tsx       # Footer component
 │   │   ├── hero.tsx         # Hero section component
-│   │   ├── login.tsx        # Login component
-│   │   ├── nuamana-navbar.tsx # Main navigation
-│   │   ├── nuamana-public-navbar.tsx # Public navigation
-│   │   └── testimonials.tsx # Testimonials component
+│   │   ├── markdown-renderer.tsx # Markdown content renderer
+│   │   ├── md-navbar.tsx    # Markdown navigation component
+│   │   ├── navbar.tsx       # Main navigation for protected routes
+│   │   ├── public-navbar.tsx # Navigation for public pages
+│   │   ├── testimonials.tsx # Testimonials component
+│   │   ├── unit-slideshow.tsx # Unit slideshow component
+│   │   └── visit-section.tsx # Visit section component
 │   ├── hooks/               # Custom React hooks
 │   │   └── use-auth.tsx     # Authentication hook
 │   ├── lib/                 # Utilities and helper functions
@@ -70,6 +79,7 @@ nuamana-pwa/
 │   └── utils/               # Utility functions
 ├── public/                  # Static assets
 ├── ddbb/                    # Database schema and migrations
+├── docs/                    # Documentation
 ├── .env.local              # Environment variables
 ├── middleware.ts           # Next.js middleware (auth protection)
 ├── package.json            # Dependencies and scripts
@@ -83,12 +93,20 @@ nuamana-pwa/
 - **Method:** Email/password with session management
 - **Hook:** `useAuth` custom hook provides login, signup, logout, and profile access
 - **State management:** Context API with AuthProvider
+- **Route protection:** Middleware protects routes like `/dashboard/*`, `/api/*`, and `/auth/*`
 
 ### Authorization & Roles
 - **Role-based access control:** Different UI modules accessible based on user role
 - **Available roles:** 'lobato (a)', 'guia', 'scout', 'pionera (o)', 'caminante', 'apoderado', 'presidente', 'tesorera', 'secretario', 'representante', 'dirigente', 'guiadora', 'admin'
-- **Middleware protection:** Routes like `/dashboard/*` and `/api/*` are protected
+- **Role hierarchy:** Admin (5) > Dirigente (4) > Directiva (3) > Apoderado (2) > NNJ (1)
+  - NNJ roles: 'lobato (a)', 'guia', 'scout', 'pionera (o)', 'caminante'
+  - Directiva roles: 'presidente', 'tesorera', 'secretario', 'representante'
+- **Module access permissions:**
+  - Users, Articles, Inventory, Treasury, Actas, Progress: Requires 'admin', 'dirigente'
+  - Treasury: Also accessible to 'tesorera'
+- **Middleware protection:** Routes like `/dashboard/*`, `/api/*` are protected
 - **RLS (Row Level Security):** Enforced at Supabase level
+- **Authorization functions:** Located in `src/utils/role-utils.ts`
 
 ## 5. Key Features & Modules
 
@@ -183,8 +201,14 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY="your_supabase_anon_key"
 
 ## 11. Routing & Page Structure
 
+### Route Groups:
+- `(home)`: Home page with special layout
+- `(public)`: Public pages including `/acerca-de` and `/lo-que-hacemos`
+
 ### Public Routes:
 - `/`: Home page with hero, features, testimonials
+- `/acerca-de/*`: About section with markdown content
+- `/lo-que-hacemos/*`: What we do section with markdown content
 - `/auth/signin`: Login page
 - `/auth/signup`: Registration page
 
@@ -196,6 +220,14 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY="your_supabase_anon_key"
 - `/dashboard/treasury`: Financial management
 - `/dashboard/actas`: Meeting minutes
 - `/dashboard/progress`: Progress tracking
+
+### Layout structure:
+- Root layout (`/src/app/layout.tsx`): Global styles, PWA configuration
+- Main layout (`/src/app/main-layout.tsx`): Public navigation and footer for public routes
+- Home layout (`/src/app/(home)/layout.tsx`): Specific layout for homepage
+- Public layout (`/src/app/(public)/layout.tsx`): Wrapper for public route group
+- Auth layout (`/src/app/auth/layout.tsx`): Special layout for auth pages without nav/footer
+- App layout (`/src/components/app-layout.tsx`): Layout for protected routes with sidebar and navbar
 
 ## 12. Performance & Optimization
 

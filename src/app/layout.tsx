@@ -46,8 +46,6 @@ export default function RootLayout({
         <meta name="apple-touch-fullscreen" content="yes" />
         {/* iOS home screen icon */}
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        {/* Trustindex script - for testimonials widget */}
-        <script defer async src='https://cdn.trustindex.io/loader.js'></script>
         {/* iOS startup image - not required but can be added if needed */}
         {/* iOS background color - using clr6 as requested (#e63946, which is red, not green as mentioned in the request) */}
         <style>{`

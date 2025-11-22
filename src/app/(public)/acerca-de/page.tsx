@@ -1,96 +1,76 @@
-'use client';
-
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/modern-button';
-import PublicNavbar from '@/components/public-navbar';
+import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
+import MarkdownRenderer from '@/components/markdown-renderer';
+import MdNavbar from '@/components/md-navbar';
+import { readContentFile, getAllContentMetadata } from '@/services/content-service';
 
-export default function AcercaDePage() {
+// Generate metadata for this page
+export async function generateMetadata(): Promise<Metadata> {
+  const { metadata } = await readContentFile('acerca-de', 'index');
+  return {
+    title: `${metadata.title} | Nua Mana - Guías y Scouts`,
+    description: metadata.description || 'Información sobre Guías y Scouts Nua Mana',
+  };
+}
+
+export default async function AcercaDePage() {
+  const { content, metadata } = await readContentFile('acerca-de', 'index');
+  const allContent = await getAllContentMetadata('acerca-de');
+
+  // Filter out the index page since it's the current page
+  const subPages = allContent
+    .filter(item => item.slug !== 'index' && item.slug !== 'acerca-de')
+    .map(item => ({
+      slug: item.slug,
+      title: item.metadata.title || item.slug,
+      description: item.metadata.description || '',
+      image: item.metadata.image || '/images/logos/logo-nuamana.webp'
+    }));
+
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-(--clr1) to-(--clr8)">
-      <div className="flex-grow">
-        <div className="container mx-auto px-4 max-w-6xl py-12">
-          <div className="text-center mb-16">
-            <h1 className="text-5xl font-bold text-(--clr4) mb-6">ACERCA DE</h1>
-            <p className="text-xl text-(--clr3) max-w-3xl mx-auto leading-relaxed">
-              Información acerca de nuestro grupo, nuestra historia, quienes somos,
-              nuestro equipo de guiadoras y dirigentes, nuestros apoderados,
-              nuestra institución patrocinante y nuestra misión y visión como grupo.
-            </p>
-          </div>
+    <>
+      <MdNavbar currentPage={metadata.title || 'Acerca de'} />
+      <div className="max-w-[1024px] mx-auto w-full">
+        <article className="prose prose-lg max-w-none">
+          <MarkdownRenderer content={content} />
+        </article>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: "QUIENES SOMOS",
-                description: "Conoce quiénes somos como grupo de Guías y Scouts",
-                path: "/acerca-de/quienes-somos",
-                bg: "bg-gradient-to-br from-(--clr7) to-(--clr4)"
-              },
-              {
-                title: "INSTITUCIÓN PATROCINANTE",
-                description: "Información sobre nuestra institución patrocinante",
-                path: "/acerca-de/institucion-patrocinante",
-                bg: "bg-gradient-to-br from-(--clr4) to-(--clr7)"
-              },
-              {
-                title: "MISIÓN Y VISIÓN",
-                description: "Nuestra misión y visión como grupo scout",
-                path: "/acerca-de/mision-y-vision",
-                bg: "bg-gradient-to-br from-(--clr5) to-(--clr6)"
-              },
-              {
-                title: "NUESTRA HISTORIA",
-                description: "La historia de nuestro grupo Guía y Scout",
-                path: "/acerca-de/nuestra-historia",
-                bg: "bg-gradient-to-br from-(--clr6) to-(--clr5)"
-              },
-              {
-                title: "NUESTRO EQUIPO",
-                description: "Conoce a nuestro equipo de guiadoras y dirigentes",
-                path: "/acerca-de/nuestro-equipo",
-                bg: "bg-gradient-to-br from-(--clr3) to-(--clr4)"
-              },
-              {
-                title: "NUESTROS APODERADOS",
-                description: "Trabajando juntos somos un gran equipo",
-                path: "/acerca-de/nuestros-apoderados",
-                bg: "bg-gradient-to-br from-(--clr7) to-(--clr5)"
-              }
-            ].map((item, index) => (
-              <Link href={item.path} key={index}>
-                <Card className="h-full group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-0 shadow-lg">
-                  <div className={`h-48 rounded-t-xl ${item.bg} flex items-center justify-center`}>
-                    <div className="text-white text-center p-4">
-                      <h3 className="text-xl font-bold">{item.title}</h3>
-                    </div>
-                  </div>
-                  <CardHeader>
-                    <CardTitle className="text-(--clr4) group-hover:text-(--clr7) transition-colors">
+        <section className="mt-12">
+          <div className="bg-white">
+            <div className="mx-auto max-w-7xl px-0 lg:px-0">
+              <div className="mx-auto max-w-2xl lg:text-center">
+                <h2 className="text-base/7 font-semibold text-red-400">Más información sobre nosotros</h2>
+                <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty sm:text-5xl lg:text-balance">Somos una aventura que cambia vidas.</p>
+                <p className="mt-6 text-lg/8 text-gray-300">Mira e Infórmate acerca de nuestro grupo, nuestra historia, quienes somos, nuestro equipo de guiadoras y dirigentes, nuestros apoderados, nuestra institución patrocinante y nuestra misión y visión como grupo.</p>
+              </div>
+              <div className="mx-auto mb-20 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
+                <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
+                  {subPages.map((item) => (
+                  <Link key={item.slug} href={`/acerca-de/${item.slug}`}>
+                  <div className="relative pl-28">
+                    <dt className="text-base/7 font-semibold">
+                      <div className="absolute top-0 left-0 flex size-25 items-center justify-center rounded-full border border-dashed border-gray-400 bg-gray-100 shadow-md">
+                        <Image
+                        src={item.image}
+                        alt={item.title}
+                        width={200}
+                        height={200}
+                        className="w-full h-auto object-contain"
+                        />
+                      </div>
                       {item.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-(--clr3) mb-4">{item.description}</p>
-                    <Button variant="outline" className="w-full">
-                      Ver más
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+                    </dt>
+                    <dd className="mt-2 text-base/7 text-gray-400">{item.description}</dd>
+                  </div>
+                  </Link>
+                ))}
+                </dl>
+              </div>
+            </div>
           </div>
-
-          <div className="mt-16 text-center">
-            <h2 className="text-2xl font-semibold text-(--clr4) mb-4">Nuestro Compromiso</h2>
-            <p className="text-(--clr3) max-w-3xl mx-auto">
-              Guías y Scouts Nua Mana - Una nueva aventura. Nuestra misión es contribuir a la educación de jóvenes
-              para que participen en la construcción de un mundo mejor, donde las personas se desarrollen plenamente
-              y jueguen un papel constructivo en la sociedad.
-            </p>
-          </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </>
   );
 }

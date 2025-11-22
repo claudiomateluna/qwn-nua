@@ -48,7 +48,7 @@ export default function SignIn() {
       <div className="flex items-center justify-center flex-grow p-4">
         <div className="w-full max-w-md">
           <Card className="shadow-2xl rounded-3xl overflow-hidden border-0">
-            <div className="bg-gradient-to-r from-(--clr7) to-(--clr4) p-8 text-center text-(--clr8)">
+            <div className="bg-gradient-to-r from-[var(--clr7)] to-[var(--clr4)] p-8 text-center text-[var(--clr8)]">
               <div className="mx-auto bg-white/20 backdrop-blur-sm w-20 h-20 rounded-full flex items-center justify-center mb-4">
                 <img
                   src="/images/logos/LogoColor.svg"

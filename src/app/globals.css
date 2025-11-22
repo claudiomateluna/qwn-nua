@@ -142,7 +142,7 @@ body {
   }
   
   .sidebar-social-btn:hover {
-    color: (--clr8);
+    color: var(--clr8);
     background-color: rgba(52, 73, 94, 0.3137254902); /* #34495e with 0.5 alpha */
   }
   

@@ -47,7 +47,7 @@ const UnitSlideShow = () => {
   }, [units.length]);
 
   return (
-    <div className="relative h-32 overflow-hidden rounded-lg">
+    <div className="relative overflow-hidden rounded-lg">
       <div 
         className="slideshow-container w-full h-full flex transition-transform duration-500 ease-in-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -60,7 +60,7 @@ const UnitSlideShow = () => {
             <img
               src={unit.image}
               alt={unit.alt}
-              className="w-12 h-12 object-contain mb-2"
+              className="w-70 h-70 object-contain"
             />
             <p className="text-sm text-gray-300 text-center">
               {unit.name}<br />{unit.displayName}
@@ -73,7 +73,6 @@ const UnitSlideShow = () => {
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
-            className={`w-2 h-2 rounded-full ${index === currentIndex ? 'bg-[#ffc41d]' : 'bg-gray-600'}`}
             aria-label={`Ir a slide ${index + 1}`}
           ></button>
         ))}

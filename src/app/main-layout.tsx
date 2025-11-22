@@ -25,13 +25,16 @@ export default function MainLayout({
     );
   }
 
+  // Don't show PublicNavbar and Footer if we're in markdown content sections
+  const isMarkdownContentPage = pathname?.startsWith('/acerca-de') || pathname?.startsWith('/lo-que-hacemos');
+
   return (
     <>
-      {!isAuthPage && <PublicNavbar />}
-      <div className="pt-23 bg-gradient-to-r from-[#1d1d1d] to-[#cb3327]/60 backdrop-blur-md">
+      {!isAuthPage && !isMarkdownContentPage && <PublicNavbar />}
+      <div>
         {children}
       </div>
-      {!isAuthPage && <Footer />}
+      {!isAuthPage && !isMarkdownContentPage && <Footer />}
     </>
   );
 }

@@ -1,43 +1,45 @@
-'use client';
+import { Metadata } from 'next';
+import MdNavbar from '@/components/md-navbar';
+import Image from 'next/image';
+import MarkdownRenderer from '@/components/markdown-renderer';
+import { readContentFile } from '@/services/content-service';
 
-import { Button } from '@/components/ui/modern-button';
-import PublicNavbar from '@/components/public-navbar';
-import Link from 'next/link';
+// Generate metadata for this page
+export async function generateMetadata(): Promise<Metadata> {
+  const { metadata } = await readContentFile('lo-que-hacemos', 'habilidades-y-tecnicas');
+  return {
+    title: `${metadata.title} | Guías y Scouts Nua Mana`,
+    description: metadata.description || 'Información sobre Guías y Scouts Nua Mana',
+  };
+}
 
-export default function HabilidadesYTecnicasPage() {
+export default async function HabilidadesYTecnicasPage() {
+  const { content, metadata } = await readContentFile('lo-que-hacemos', 'habilidades-y-tecnicas');
+
+  // Use the image from metadata if available, otherwise default to logo
+  const imageSrc = metadata.image || '/images/logos/logo-nuamana.webp';
+  const imageAlt = metadata.image ? metadata.title : 'Logo Guías y Scouts Nua Mana';
+
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-(--clr1) to-(--clr8)">
-      <div className="flex-grow">
-        <div className="container mx-auto px-4 max-w-4xl py-12">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-(--clr4) mb-6">HABILIDADES Y TÉCNICAS</h1>
-            <p className="text-xl text-(--clr3)">Desarrollo de competencias prácticas en los jóvenes</p>
-          </div>
-
-          <div className="bg-(--clr1) rounded-2xl p-12 mb-12 shadow-lg border border-(--clr4)/20 text-center">
-            <h2 className="text-2xl font-bold text-(--clr4) mb-4">¡Próximamente!</h2>
-            <p className="text-(--clr3) mb-6">
-              Estamos trabajando para traerte la información sobre Habilidades y Técnicas.
-            </p>
-            <p className="text-(--clr3)">
-              Mientras tanto, puedes explorar otras secciones de nuestro sitio.
-            </p>
-          </div>
-
-          <div className="flex justify-between items-center">
-            <Link href="/lo-que-hacemos">
-              <Button variant="outline">
-                ← Volver a Lo que hacemos
-              </Button>
-            </Link>
-            <Link href="/lo-que-hacemos/ley-y-promesa">
-              <Button>
-                Siguiente: Ley y Promesa →
-              </Button>
-            </Link>
+    <>
+      <MdNavbar currentPage={metadata.title || 'Habilidades Y Tecnicas'} />
+      <div className="max-w-[1024px] mx-auto w-full"> {/* Ajuste de padding-top para compensar el navbar fijo */}
+        <div className="mb-8 flex justify-center">
+          <div className="max-w-[360px] w-full">
+            <Image
+              src={imageSrc}
+              alt={imageAlt}
+              width={360}
+              height={360}
+              className="w-full h-auto object-contain rounded-4xl"
+              priority
+            />
           </div>
         </div>
+        <article className="prose prose-lg max-w-none">
+          <MarkdownRenderer content={content} />
+        </article>
       </div>
-    </div>
+    </>
   );
 }

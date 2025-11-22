@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/modern-button';
 import SidebarDrawer from '@/components/ui/sidebar-drawer';
-import { Menu, Home, Instagram, Facebook, Youtube, MessageCircle, Mail, LogIn } from 'lucide-react';
+import { Menu, Home, LogIn } from 'lucide-react';
+import { IconoInstagram, IconoFacebook, IconoYoutube, IconoTiktok, IconoGoogle, IconoEmail, IconoWhatsApp } from '@/components/ui/custom-icons';
 
 const NuaManaPublicNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +36,7 @@ const NuaManaPublicNavbar = () => {
         >
           <div className="max-w-[1080px] mx-auto flex justify-between">
             <div className="flex justify-start gap-2 flex items-center">
-              <div className="flex items-center border-r-2 border-(--clr8) pl-2">
+              <div className="flex items-center border-r-2 border-[var(--clr8)] pl-2">
                 {/* First: Menu button */}
                 <Button
                   variant="ghost"
@@ -64,9 +65,11 @@ const NuaManaPublicNavbar = () => {
                   </a>
               </div>
               <div className="flex flex-col justify-center header-text-box">
-                <div className="text-xs text-(--clr2) leading-[1.6em]">Guías y Scouts</div>
-                <div className="text-white uppercase text-[1.6em] leading-[0.7em] header-nuamana">Nua Mana</div>
-                <div className="text-(--clr8) leading-none">Una nueva aventura</div>
+                <a href="/">
+                  <div className="text-xs text-[var(--clr2)] leading-[1.6em]">Guías y Scouts</div>
+                  <div className="text-white uppercase text-[1.6em] leading-[0.7em] header-nuamana">Nua Mana</div>
+                  <div className="text-[var(--clr8)] leading-none">Una nueva aventura</div>
+                </a>
               </div>
             </div>
             {/* third: Social */}
@@ -74,30 +77,36 @@ const NuaManaPublicNavbar = () => {
               <div className="flex items-center header-rrss">
                 <div className="flex items-center text-white text-sm">Síguenos</div>
                 <a href="https://www.instagram.com/gruponuamana/" target="_blank" rel="noopener noreferrer" className="text-[#fff] hover:text-[#ffc41d] transition-colors">
-                  <Instagram className="w-4 h-4" />
+                  <IconoInstagram className="w-4 h-4" strokeWidth={0.2} />
                 </a>
                 <a href="https://facebook.com/gruponuamana" target="_blank" rel="noopener noreferrer" className="text-[#fff] hover:text-[#ffc41d] transition-colors">
-                  <Facebook className="w-4 h-4" />
+                  <IconoFacebook className="w-4 h-4" strokeWidth={0.2} />
                 </a>
                 <a href="https://youtube.com/@gruponuamana" target="_blank" rel="noopener noreferrer" className="text-[#fff] hover:text-[#ffc41d] transition-colors">
-                  <Youtube className="w-4 h-4" />
+                  <IconoYoutube className="w-4 h-4" strokeWidth={0.2} />
+                </a>
+                <a href="https://tiktok.com/@gruponuamana" target="_blank" rel="noopener noreferrer" className="text-[#fff] hover:text-[#ffc41d] transition-colors">
+                  <IconoTiktok className="w-4 h-4" strokeWidth={0.2} />
                 </a>
               </div>
-              <div className="flex items-center header-rrss">
+              <div className="flex items-center gap-2">
+                <a href="https://www.google.com/search?q=Guias+y+Scouts+Nua+Mana" target="_blank" rel="noopener noreferrer" className="text-[#fff] hover:text-[#ffc41d] transition-colors">
+                  <IconoGoogle className="w-4 h-4 mr-1 text-[var(--clr8)]" strokeWidth={0.2} />
+                </a>
                 <a href="mailto:contacto@nuamana.cl" target="_blank" rel="noopener noreferrer" className="text-[#fff] hover:text-[#ffc41d] transition-colors">
-                  <Mail className="w-4 h-4 mr-1 text-(--clr8)" />
+                  <IconoEmail className="w-4 h-4 mr-1 text-[var(--clr8)]" strokeWidth={0.2} />
                 </a>
                 <a href="https://wa.me/+56966896001" target="_blank" rel="noopener noreferrer" className="text-[#fff] hover:text-[#ffc41d] transition-colors">
-                  <MessageCircle className="w-4 h-4 mr-1 text-(--clr8)" />
+                  <IconoWhatsApp className="w-4 h-4 mr-1 text-[var(--clr8)]" strokeWidth={0.2} />
                 </a>
-                <div className="flex items-center text-sm text-(--clr8)">Contactactanos</div>
+                <div className="flex items-center text-sm text-[var(--clr8)]">Contactactanos</div>
               </div>
             </div>
 
             {/* Fifth: Login */}
             <div className="header-acceder flex items-center hidden lg:flex">
               <div className="flex items-center">
-                <a href="/auth/signin" className="bg-transparent text-(--clr8) hover:text-white text-base flex items-center">
+                <a href="/auth/signin" className="bg-transparent text-[var(--clr8)] hover:text-white text-base flex items-center">
                   <LogIn className="w-4 h-4 mr-1" />
                   Acceder
                 </a>
@@ -109,7 +118,7 @@ const NuaManaPublicNavbar = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-white hover:text-(--clr8) bg-transparent hover:bg-transparent"
+                  className="text-white hover:text-[var(--clr8)] bg-transparent hover:bg-transparent"
                   onClick={() => router.push('/buscar')}
                 >
                   <svg className="w-6 h-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -1,120 +1,45 @@
-'use client';
+import { Metadata } from 'next';
+import MdNavbar from '@/components/md-navbar';
+import Image from 'next/image';
+import MarkdownRenderer from '@/components/markdown-renderer';
+import { readContentFile } from '@/services/content-service';
 
-import { Button } from '@/components/ui/modern-button';
-import PublicNavbar from '@/components/public-navbar';
-import Link from 'next/link';
+// Generate metadata for this page
+export async function generateMetadata(): Promise<Metadata> {
+  const { metadata } = await readContentFile('acerca-de', 'nuestros-apoderados');
+  return {
+    title: `${metadata.title} | Nua Mana - Guías y Scouts`,
+    description: metadata.description || 'Información sobre Guías y Scouts Nua Mana',
+  };
+}
 
-export default function NuestrosApoderadosPage() {
+export default async function NuestrosApoderadosPage() {
+  const { content, metadata } = await readContentFile('acerca-de', 'nuestros-apoderados');
+
+  // Use the image from metadata if available, otherwise default to logo
+  const imageSrc = metadata.image || '/images/logos/logo-nuamana.webp';
+  const imageAlt = metadata.image ? metadata.title : 'Logo Guías y Scouts Nua Mana';
+
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-(--clr1) from-40% to-(--clr2) to-100%">
-      <div className="flex-grow">
-        <div className="container mx-auto px-4 max-w-4xl py-12">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-(--clr4)">NUESTROS APODERADOS</h1>
-            <p className="text-xl font-semibold text-(--clr4)">Trabajando juntos somos un gran equipo</p>
-          </div>
-
-          <div className="bg-(--clr1) rounded-2xl p-8 mb-12 shadow-lg border border-(--clr4)/20">
-            <p className="text-(--clr3) text-justify text-lg">
-              Nuestros apoderados y apoderadas son parte activa en nuestro grupo, pues son ellos quienes conforman
-              el Comité de Grupo, este organismo tiene como fin apoyar al desarrollo y la gestión del grupo, como también
-              contribuir a generar una tarea educativa integrada y eficaz. Para lograr esto, nuestros apoderados a través
-              del Comité de Grupo deben facilitar la colaboración en la educación de los niños y jóvenes en Nua Mana,
-              facilitando el diálogo entre padres e hijos, intercambiando opiniones, y teniendo un mayor grado de
-              conocimiento del Proyecto Educativo de la Asociación.
-            </p>
-          </div>
-
-          <div className="bg-(--clr1) rounded-2xl p-8 mb-12 shadow-lg border border-(--clr4)/20">
-            <h2 className="text-2xl font-bold text-(--clr4) mb-6">¿Quiénes forman el Comité de Grupo?</h2>
-            <p className="text-(--clr3) mb-6">
-              Todos nuestros apoderados, madres, padres y apoderados en general de los miembros beneficiarios del grupo
-              son parte del Comité, quienes en el Consejo de Grupo, junto a los dirigentes y guiadoras, tienen la meta de
-              la educación integral de los niños y jóvenes. Nuestros apoderados y apoderadas eligen en el Comité de Grupo
-              año a año a un presidente y un tesorero, así como un representante por cada rango de edad de las ramas menores
-              (7 a 11 años), intermedias (11 a 15 años) y mayores (15 a 20 años), siempre que éstas no estén representadas
-              en el presidente o tesorero. Aquellos dirigentes y guiadoras del grupo que fueran parte de nuestros apoderados,
-              es decir, padres de jóvenes miembros de grupo, que ocupen los cargos de responsable de grupo, asistente de grupo,
-              responsable de unidad y asistente de unidad no podrán acceder a cargos ni participar de las reuniones, en su
-              calidad de padres o apoderados del comité de grupo.
-            </p>
-          </div>
-
-          <div className="bg-(--clr1) rounded-2xl p-8 mb-12 shadow-lg border border-(--clr4)/20">
-            <h2 className="text-2xl font-bold text-(--clr4) mb-6">Derechos del Comité de Grupo:</h2>
-            <ol className="list-decimal list-inside text-(--clr3) space-y-3">
-              <li>
-                Determinar, de acuerdo al artículo 69 del Estatuto y al artículo 158 del presente Título VI del Reglamento,
-                el carácter confesional o pluriconfesional del grupo.
-              </li>
-              <li>
-                Solicitar información al Consejo de Grupo sobre las actividades, el método del movimiento y el proyecto educativo
-                que aplica la Asociación.
-              </li>
-              <li>
-                Exigir al consejo de grupo guiadoras y dirigentes idóneos, competentes y suficientemente capacitados para la
-                tarea educativa que se las ha encomendado, de acuerdo con la Política de Recursos Adultos.
-              </li>
-              <li>
-                Elegir, de entre sus miembros, una directiva que acoja sus inquietudes, planifique su cooperación y sirva de
-                permanente enlace entre el grupo y los padres.
-              </li>
-              <li>
-                Mantener representantes de comité de grupo, con derecho a voz y voto, ante el Consejo de Grupo. El comité de
-                grupo deberá elegir representantes ante el consejo de grupo, por cada rango de edad de las ramas menores,
-                intermedias y mayores. Al ser el presidente y el tesorero representantes de algunos de estos rangos de edad,
-                solo corresponde elegir para aquellos no representados.
-              </li>
-            </ol>
-          </div>
-
-          <div className="bg-(--clr1) rounded-2xl p-8 mb-12 shadow-lg border border-(--clr4)/20">
-            <h2 className="text-2xl font-bold text-(--clr4) mb-6">Obligaciones del Comité de Grupo:</h2>
-            <ol className="list-decimal list-inside text-(--clr3) space-y-3">
-              <li>
-                Conocer el Método del Movimiento, informarse sobre el funcionamiento del Grupo, promover el diálogo con los
-                dirigentes e interesarse por la labor que éstos desarrollan.
-              </li>
-              <li>
-                Aportar al consejo de grupo, sin asumir funciones o atribuciones que le corresponden a éste.
-              </li>
-              <li>
-                Apoyar en la tarea educativa de las guiadoras y dirigentes y otorgar los permisos y facilidades para que
-                sus hijos puedan participar en el programa de las unidades y del grupo.
-              </li>
-              <li>
-                Facilitar la formación de las guiadoras y dirigentes, prestándoles la ayuda que necesiten para concurrir a
-                las actividades de capacitación y formación.
-              </li>
-              <li>
-                Colaborar económicamente, mediante campañas o aportes, cuando la directiva del comité lo solicite.
-              </li>
-              <li>
-                Formar una comisión Revisora de Cuentas al inicio de cada año compuesta por tres apoderados que no hayan
-                ocupado ningún cargo en la directiva en el año a revisar, quienes emitirán un informe por escrito al respecto,
-                en un plazo máximo de 3 meses.
-              </li>
-              <li>
-                Solicitarle la renuncia por razones fundadas a los miembros de las directivas que hayan dejado sus funciones
-                abandonadas o las estén desarrollando de una forma que no ayuda al funcionamiento del Comité ni de la Directiva.
-              </li>
-            </ol>
-          </div>
-
-          <div className="flex justify-between items-center">
-            <Link href="/acerca-de">
-              <Button variant="outline">
-                ← Volver a Acerca de
-              </Button>
-            </Link>
-            <Link href="/lo-que-hacemos">
-              <Button>
-                Siguiente: Lo que hacemos →
-              </Button>
-            </Link>
+    <>
+      <MdNavbar currentPage={metadata.title || 'Nuestros Apoderados'} />
+      <div className="max-w-[1024px] mx-auto w-full"> {/* Ajuste de padding-top para compensar el navbar fijo */}
+        <div className="mb-8 flex justify-center">
+          <div className="max-w-[360px] w-full">
+            <Image
+              src={imageSrc}
+              alt={imageAlt}
+              width={360}
+              height={360}
+              className="w-full h-auto object-contain"
+              priority
+            />
           </div>
         </div>
+        <article className="prose prose-lg max-w-none">
+          <MarkdownRenderer content={content} />
+        </article>
       </div>
-    </div>
+    </>
   );
 }

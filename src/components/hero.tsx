@@ -144,7 +144,7 @@ const Hero = () => {
 
         {/* Contenido centrado */}
         <div className="relative z-1 text-center text-white mb-8 max-w-[1024px] mx-auto px-2">
-          <h2 className="text-3xl md:text-5xl font-bold text-shadow-md text-(--clr8)">
+          <h2 className="text-3xl md:text-5xl font-bold text-shadow-md text-[var(--clr8)]">
             {phrases[currentSlide].split(',')[0]},
           </h2>
           <p className="text-xl md:text-2xl">

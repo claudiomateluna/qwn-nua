@@ -44,7 +44,6 @@ const SheetContent = React.forwardRef<
     />
     <VaulDrawer.Content
       ref={ref}
-      position={side}
       className={cn(drawerVariants({ side }), className)}
       {...props}
     >

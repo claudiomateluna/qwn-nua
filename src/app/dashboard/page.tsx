@@ -17,7 +17,7 @@ export default function Dashboard() {
       description: "Gestiona usuarios y perfiles",
       icon: User as any,
       action: () => router.push('/dashboard/users'),
-      roleRequired: 'admin',
+      roleRequired: ['admin', 'dirigente'],
       gradient: "from-[#2c3e50] to-[#ffc41d]"
     },
     {
@@ -25,7 +25,7 @@ export default function Dashboard() {
       description: "Crea y gestiona contenido",
       icon: FileText,
       action: () => router.push('/dashboard/articles'),
-      roleRequired: 'admin',
+      roleRequired: ['admin', 'dirigente'],
       gradient: "from-[#ffc41d] to-[#f39c12]"
     },
     {
@@ -33,7 +33,7 @@ export default function Dashboard() {
       description: "Control de equipo y recursos",
       icon: Package,
       action: () => router.push('/dashboard/inventory'),
-      roleRequired: 'admin',
+      roleRequired: ['admin', 'dirigente'],
       gradient: "from-[#e74c3c] to-[#c0392b]"
     },
     {
@@ -41,7 +41,7 @@ export default function Dashboard() {
       description: "Gestión financiera",
       icon: Coins,
       action: () => router.push('/dashboard/treasury'),
-      roleRequired: 'admin',
+      roleRequired: ['admin', 'dirigente', 'tesorera'],
       gradient: "from-[#2c3e50] to-[#34495e]"
     },
     {
@@ -49,7 +49,7 @@ export default function Dashboard() {
       description: "Actas de reuniones",
       icon: FileInput,
       action: () => router.push('/dashboard/actas'),
-      roleRequired: 'admin',
+      roleRequired: ['admin', 'dirigente'],
       gradient: "from-[#ffc41d] to-[#f39c12]"
     },
     {
@@ -57,12 +57,18 @@ export default function Dashboard() {
       description: "Seguimiento de progreso scout",
       icon: Trophy,
       action: () => router.push('/dashboard/progress'),
-      roleRequired: 'admin',
+      roleRequired: ['admin', 'dirigente'],
       gradient: "from-[#e74c3c] to-[#cb2733]"
     }
   ];
 
-  const filteredMenuItems = menuItems;
+  const filteredMenuItems = profile
+    ? menuItems.filter(item =>
+        !item.roleRequired ||
+        item.roleRequired.includes(profile.role) ||
+        item.roleRequired.includes('all')
+      )
+    : menuItems.filter(item => item.roleRequired.includes('all'));
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -103,7 +109,7 @@ export default function Dashboard() {
           ))}
         </div>
       </main>
-      </div> {/* Close the max-w-[1080px] container */}
+
     </div>
   );
 }

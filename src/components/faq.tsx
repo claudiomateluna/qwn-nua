@@ -48,21 +48,21 @@ const FAQItem = ({ question, answer, isOpen, toggleOpen, image }: {
   image: string;
 }) => {
   return (
-    <div className="border border-(--clr4)/20 rounded-xl overflow-hidden mb-4 shadow-sm hover:shadow-md transition-shadow">
+    <div className="border border-[var(--clr4)]/20 rounded-xl overflow-hidden mb-4 shadow-sm hover:shadow-md transition-shadow">
       <button
-        className="w-full flex justify-between items-center p-6 text-left bg-(--clr1) hover:bg-(--clr1)/70 transition-colors"
+        className="w-full flex justify-between items-center p-6 text-left bg-[var(--clr1)] hover:bg-[var(--clr1)]/70 transition-colors"
         onClick={toggleOpen}
         aria-expanded={isOpen}
       >
-        <h3 className="text-lg font-semibold text-(--clr4)">{question}</h3>
+        <h3 className="text-lg font-semibold text-[var(--clr4)]">{question}</h3>
         {isOpen ? (
-          <ChevronUp className="h-5 w-5 text-(--clr7) flex-shrink-0 ml-4" />
+          <ChevronUp className="h-5 w-5 text-[var(--clr7)] flex-shrink-0 ml-4" />
         ) : (
-          <ChevronDown className="h-5 w-5 text-(--clr7) flex-shrink-0 ml-4" />
+          <ChevronDown className="h-5 w-5 text-[var(--clr7)] flex-shrink-0 ml-4" />
         )}
       </button>
       {isOpen && (
-        <div className="p-4 pt-0 bg-(--clr1)/20 border-t border-(--clr4)/10">
+        <div className="p-4 pt-0 bg-[var(--clr1)]/20 border-t border-[var(--clr4)]/10">
           <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="flex-shrink-0 w-50 h-50 overflow-hidden rounded-lg">
               <img
@@ -72,7 +72,7 @@ const FAQItem = ({ question, answer, isOpen, toggleOpen, image }: {
               />
             </div>
             <p
-              className="text-(--clr3) flex-grow"
+              className="text-[var(--clr3)] flex-grow"
               dangerouslySetInnerHTML={{ __html: answer }}
             />
           </div>
@@ -99,12 +99,12 @@ const FAQ = () => {
         <div className="text-center mb-16">
           <h2
             id="faq-title"
-            className="text-4xl font-bold text-(--clr4) mb-4"
+            className="text-4xl font-bold text-[var(--clr4)] mb-4"
           >
             Preguntas Frecuentes
           </h2>
-          <p className="text-xl text-(--clr3) max-w-2xl mx-auto">
-            Encuentra respuestas a las preguntas más comunes sobre Nua Mana - Guías y Scouts
+          <p className="text-xl text-[var(--clr3)] max-w-2xl mx-auto">
+            Encuentra respuestas a las preguntas más comunes que nos hacen
           </p>
         </div>
 
