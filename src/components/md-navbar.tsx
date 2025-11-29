@@ -65,11 +65,13 @@ const MarkdownNavbar = ({
                     />
                   </a>
               </div>
-              <div className="flex flex-col justify-center header-text-box">
-                <div className="text-xs text-[var(--clr2)] leading-[1.2em] lg:block">Guías y Scouts</div>
-                <div className="text-[var(--clr7)] uppercase text-[1.6em] leading-[0.7em] header-nuamana">Nua Mana</div>
-                <div className="text-[var(--clr2)] text-[0.95em] leading-none lg:block">Una nueva aventura</div>
-              </div>
+              <a href="/">
+                <div className="flex flex-col justify-center header-text-box">
+                  <div className="text-xs text-[var(--clr2)] leading-[1.2em] lg:block">Guías y Scouts</div>
+                  <div className="text-[var(--clr7)] uppercase text-[1.6em] leading-[0.7em] header-nuamana">Nua Mana</div>
+                  <div className="text-[var(--clr2)] text-[0.95em] leading-none lg:block">Una nueva aventura</div>
+                </div>
+              </a>
             </div>
             {/* third: Page title instead of social */}
             <div className="flex flex-col justify-center hidden lg:flex">

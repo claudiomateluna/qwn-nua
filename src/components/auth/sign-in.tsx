@@ -30,7 +30,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className="flex flex-col size-auto">
+    <div className="min-h-[95vh] flex flex-col size-auto">
       {/* Back Arrow */}
       <div className="p-4">
         <button
@@ -47,7 +47,7 @@ export default function SignIn() {
       {/* Centered Content */}
       <div className="flex items-center justify-center flex-grow p-4">
         <div className="w-full max-w-md">
-          <Card className="shadow-2xl rounded-3xl overflow-hidden border-0">
+          <Card className="rounded-3xl overflow-hidden border-0">
             <div className="bg-gradient-to-r from-[var(--clr7)] to-[var(--clr4)] p-8 text-center text-[var(--clr8)]">
               <div className="mx-auto bg-white/20 backdrop-blur-sm w-20 h-20 rounded-full flex items-center justify-center mb-4">
                 <img

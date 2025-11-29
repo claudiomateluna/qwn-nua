@@ -3,8 +3,8 @@
 import React, { useState, useEffect, ReactElement } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/modern-button';
-import { Menu, Home, Instagram, Facebook, Youtube, X, User } from 'lucide-react';
-import { IconoInicio, IconoAcercaDe, IconoAcercaDeQuienesSomos, IconoAcercaDeNuestraHistoria, IconoAcercaDeMisionVision, IconoAcercaDeNuestroEquipo, IconoLoQueHacemos, ArrowLeftIcon, IconoInstagram, IconoFacebook, IconoYoutube, IconoTiktok, IconoGoogle, IconoEmail, IconoWhatsApp } from '@/components/ui/custom-icons';
+import { Menu, Home, X } from 'lucide-react';
+import { IconoInicio, IconoAcercaDe, IconoAcercaDeQuienesSomos, IconoAcercaDeNuestraHistoria, IconoAcercaDeMisionVision, IconoAcercaDeNuestroEquipo, IconoAcercaDeNuestrosApoderados, IconoAcercaDeInstitucionPatrocinante, IconoLoQueHacemos, IconoLoQueHacemosMetodoScout, IconoLoQueHacemosAireLibre, IconoLoQueHacemosAprenderHaciendo, IconoLoQueHacemosHabilidadesTecnicas, IconoLoQueHacemosProgramasActividades, IconoLoQueHacemosSistemaEquipos, IconoLoQueHacemosVidaReflexiva, ArrowLeftIcon, IconoRRSSInstagram, IconoRRSSFacebook, IconoRRSSYoutube, IconoRRSSTiktok, IconoRRSSGoogle, IconoRRSSEmail, IconoRRSSWhatsApp } from '@/components/ui/custom-icons';
 
 interface SidebarDrawerProps {
   isOpen: boolean;
@@ -40,20 +40,20 @@ const SidebarDrawer = ({ isOpen, onClose }: SidebarDrawerProps) => {
     { title: "Nuestra Historia", action: () => router.push('/acerca-de/nuestra-historia'), icon: IconoAcercaDeNuestraHistoria },
     { title: "Misión y Visión", action: () => router.push('/acerca-de/mision-y-vision'), icon: IconoAcercaDeMisionVision },
     { title: "Nuestro Equipo", action: () => router.push('/acerca-de/nuestro-equipo'), icon: IconoAcercaDeNuestroEquipo },
-    { title: "Nuestros Apoderados", action: () => router.push('/acerca-de/nuestros-apoderados'), icon: User },
-    { title: "Institución Patrocinante", action: () => router.push('/acerca-de/institucion-patrocinante'), icon: Home },
+    { title: "Nuestros Apoderados", action: () => router.push('/acerca-de/nuestros-apoderados'), icon: IconoAcercaDeNuestrosApoderados },
+    { title: "Institución Patrocinante", action: () => router.push('/acerca-de/institucion-patrocinante'), icon: IconoAcercaDeInstitucionPatrocinante },
   ];
 
   // Sub-menu items for "Lo que hacemos"
   const loQueHacemosItems = [
-    { title: "Ley y Promesa", action: () => router.push('/lo-que-hacemos/ley-y-promesa'), icon: Menu },
-    { title: "El Método Scout", action: () => router.push('/lo-que-hacemos/el-metodo-scout'), icon: Menu },
-    { title: "Aprender Haciendo", action: () => router.push('/lo-que-hacemos/aprender-haciendo'), icon: Menu },
-    { title: "Sistema de Equipos", action: () => router.push('/lo-que-hacemos/sistema-de-equipos'), icon: Menu },
-    { title: "Vida al Aire Libre", action: () => router.push('/lo-que-hacemos/vida-al-aire-libre'), icon: Home },
-    { title: "Habilidades y Técnicas", action: () => router.push('/lo-que-hacemos/habilidades-y-tecnicas'), icon: Menu },
-    { title: "Vida Reflexiva", action: () => router.push('/lo-que-hacemos/vida-reflexiva'), icon: Menu },
-    { title: "Programa y Actividades", action: () => router.push('/lo-que-hacemos/programa-y-actividades'), icon: Menu },
+    { title: "Ley y Promesa", action: () => router.push('/lo-que-hacemos/ley-y-promesa'), icon: IconoLoQueHacemos },
+    { title: "El Método Scout", action: () => router.push('/lo-que-hacemos/el-metodo-scout'), icon: IconoLoQueHacemosMetodoScout },
+    { title: "Aprender Haciendo", action: () => router.push('/lo-que-hacemos/aprender-haciendo'), icon: IconoLoQueHacemosAprenderHaciendo },
+    { title: "Sistema de Equipos", action: () => router.push('/lo-que-hacemos/sistema-de-equipos'), icon: IconoLoQueHacemosSistemaEquipos },
+    { title: "Vida al Aire Libre", action: () => router.push('/lo-que-hacemos/vida-al-aire-libre'), icon: IconoLoQueHacemosAireLibre },
+    { title: "Habilidades y Técnicas", action: () => router.push('/lo-que-hacemos/habilidades-y-tecnicas'), icon: IconoLoQueHacemosHabilidadesTecnicas },
+    { title: "Vida Reflexiva", action: () => router.push('/lo-que-hacemos/vida-reflexiva'), icon: IconoLoQueHacemosVidaReflexiva },
+    { title: "Programa y Actividades", action: () => router.push('/lo-que-hacemos/programa-y-actividades'), icon: IconoLoQueHacemosProgramasActividades },
   ];
 
   if (!isOpen) return null;
@@ -191,7 +191,7 @@ const SidebarDrawer = ({ isOpen, onClose }: SidebarDrawerProps) => {
                       rel="noopener noreferrer"
                       className="sidebar-social-btn text-white hover:text-(--clr8) transition-colors p-2 rounded-full hover:bg-(--clr5)/50"
                     >
-                      <IconoInstagram className="w-5 h-5" strokeWidth={0.2} />
+                      <IconoRRSSInstagram className="w-5 h-5" strokeWidth={0.2} />
                     </a>
                     <a
                       href="https://facebook.com/gruponuamana"
@@ -199,7 +199,7 @@ const SidebarDrawer = ({ isOpen, onClose }: SidebarDrawerProps) => {
                       rel="noopener noreferrer"
                       className="sidebar-social-btn text-white hover:text-(--clr8) transition-colors p-2 rounded-full hover:bg-(--clr5)/50"
                     >
-                      <IconoFacebook className="w-5 h-5" strokeWidth={0.2} />
+                      <IconoRRSSFacebook className="w-5 h-5" strokeWidth={0.2} />
                     </a>
                     <a
                       href="https://youtube.com/@gruponuamana"
@@ -207,7 +207,7 @@ const SidebarDrawer = ({ isOpen, onClose }: SidebarDrawerProps) => {
                       rel="noopener noreferrer"
                       className="sidebar-social-btn text-white hover:text-(--clr8) transition-colors p-2 rounded-full hover:bg-(--clr5)/50"
                     >
-                      <IconoYoutube className="w-5 h-5" strokeWidth={0.2} />
+                      <IconoRRSSYoutube className="w-5 h-5" strokeWidth={0.2} />
                     </a>
                     <a
                       href="https://tiktok.com/@gruponuamana"
@@ -215,7 +215,7 @@ const SidebarDrawer = ({ isOpen, onClose }: SidebarDrawerProps) => {
                       rel="noopener noreferrer"
                       className="sidebar-social-btn text-white hover:text-(--clr8) transition-colors p-2 rounded-full hover:bg-(--clr5)/50"
                     >
-                      <IconoTiktok className="w-5 h-5" strokeWidth={0.2} />
+                      <IconoRRSSTiktok className="w-5 h-5" strokeWidth={0.2} />
                     </a>
                     <a
                       href="https://www.google.com/search?q=Guias+y+Scouts+Nua+Mana"
@@ -223,7 +223,7 @@ const SidebarDrawer = ({ isOpen, onClose }: SidebarDrawerProps) => {
                       rel="noopener noreferrer"
                       className="sidebar-social-btn text-white hover:text-(--clr8) transition-colors p-2 rounded-full hover:bg-(--clr5)/50"
                     >
-                      <IconoGoogle className="w-5 h-5" strokeWidth={0.2} />
+                      <IconoRRSSGoogle className="w-5 h-5" strokeWidth={0.2} />
                     </a>
                     <a
                       href="https://wa.me/+56966896001"
@@ -231,7 +231,7 @@ const SidebarDrawer = ({ isOpen, onClose }: SidebarDrawerProps) => {
                       rel="noopener noreferrer"
                       className="sidebar-social-btn text-white hover:text-(--clr8) transition-colors p-2 rounded-full hover:bg-(--clr5)/50"
                     >
-                      <IconoWhatsApp className="w-5 h-5" strokeWidth={0.2} />
+                      <IconoRRSSWhatsApp className="w-5 h-5" strokeWidth={0.2} />
                     </a>
                     <a
                       href="mailto:contacto@nuamana.cl"
@@ -239,7 +239,7 @@ const SidebarDrawer = ({ isOpen, onClose }: SidebarDrawerProps) => {
                       rel="noopener noreferrer"
                       className="sidebar-social-btn text-white hover:text-(--clr8) transition-colors p-2 rounded-full hover:bg-(--clr5)/50"
                     >
-                      <IconoEmail className="w-5 h-5" strokeWidth={0.2} />
+                      <IconoRRSSEmail className="w-5 h-5" strokeWidth={0.2} />
                     </a>
                   </div>
                 </div>

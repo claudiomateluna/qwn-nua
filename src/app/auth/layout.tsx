@@ -29,10 +29,10 @@ export default function AuthLayout({
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#2c3e50] to-[#ffc41d]">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-(--clr5) to-(--clr7)">
       <div className="max-w-[1080px] mx-auto w-full flex-grow">
         <main className="flex items-center justify-center p-4 h-full">
-          <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
+          <div className="w-full bg-white rounded-2xl overflow-hidden">
             {children}
           </div>
         </main>

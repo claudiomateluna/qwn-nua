@@ -10,7 +10,7 @@
 - Run tests, builds, and development servers
 
 ### Project Context
-- Date: miércoles, 12 de noviembre de 2025
+- Date: martes, 25 de noviembre de 2025
 - OS: Windows 32-bit
 - Project: Next.js PWA application for Guías y Scouts Nua Mana
 - Framework: Next.js 16.0.1, TypeScript, Tailwind CSS
@@ -42,8 +42,17 @@
 - Form management with validation
 - File storage with OCI
 
-### Reference Documents Created
-- `application-analysis-reference.md` - Comprehensive analysis of the application
+### Multi-Step Registration Process
+- Completed a 5-step registration process:
+  1. Authorization Password (with password "2005")
+  2. Role Selection
+  3. Name and Surname
+  4. RUT (with validation for both 7 and 8 digit formats)
+  5. Email and Password
+- Implemented responsive design for all steps
+- Added RUT validation and formatting functions
+- Added progress indicator and progress bar with gradient
+- Ensured consistent styling across all steps
 
 ### Preferred Workflow
 - Use todo_write for tracking multi-step tasks
@@ -53,8 +62,3 @@
 - Follow TypeScript best practices and component patterns used in the project
 
 ## Qwen Added Memories
-- Se ha implementado un componente de footer para el sitio web Nua Mana que aparece en todas las páginas públicas excepto en las de autenticación. Se ha reorganizado la estructura de la aplicación Next.js usando Route Groups para separar páginas públicas y de autenticación, y se ha creado un layout específico para la página de inicio. El footer incluye información de contacto, redes sociales, unidades scouts y sistema de rating, todo basado en el sitio nuamana.cl. También se han corregido problemas de estilo en el navbar para que tenga un fondo apropiado en lugar de transparente.
-
-- Se ha verificado que el archivo `src/components/app-layout.tsx` no contiene referencias a roles de almacén ("Warehouse Operator", "Store Supervisor", "Warehouse Supervisor") como se había mencionado previamente. El archivo actualmente solo contiene código relacionado con el layout de la aplicación para la plataforma Guías y Scouts Nua Mana. La estructura de roles actual se encuentra en el archivo `src/utils/role-utils.ts` y está alineada con el propósito de la organización scouts.
-
-- Se ha creado el componente VisitSection para la página principal con una estructura de dos columnas (30%-70%) que incluye: contador animado de años de experiencia desde la fundación (23 de septiembre de 2005), icono de correo con efecto hover, imagen con texto "VEN A VISITARNOS", reloj analógico animado y icono de mapa con animación. El componente utiliza los colores del sistema de diseño de Nua Mana y se integra en la página principal entre las secciones de testimonios y FAQ.

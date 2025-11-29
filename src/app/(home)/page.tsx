@@ -10,6 +10,7 @@ import Hero from '@/components/hero';
 import Testimonials from '@/components/testimonials';
 import FAQ from '@/components/faq';
 import VisitSection from '@/components/visit-section';
+import { link } from 'fs';
 
 export default function HomePage() {
   const router = useRouter();
@@ -47,27 +48,31 @@ export default function HomePage() {
               {
                 title: "LOGRAMOS",
                 description: "Empoderamiento Juvenil",
-                image: "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/pag_Logramos.jpg"
+                image: "/images/inicio/pag_Logramos.jpg",
+                link: "/lo-que-hacemos/sistema-de-equipos"
               },
               {
                 title: "CREAMOS",
                 description: "Ciudadan@s Activ@s",
-                image: "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/pag_Creamos.jpg"
+                image: "/images/inicio/pag_Creamos.jpg",
+                link: "/lo-que-hacemos/programa-y-actividades"
               },
               {
                 title: "CULTIVAMOS",
                 description: "Valores y Habilidades",
-                image: "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/pag_Cultivamos.jpg"
+                image: "/images/inicio/pag_Cultivamos.jpg",
+                link: "/lo-que-hacemos/habilidades-y-tecnicas"
               },
               {
                 title: "ABRAZAMOS",
                 description: "Educación para la Paz",
-                image: "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/pag_Abrazamos.jpg"
+                image: "/images/inicio/pag_Abrazamos.jpg",
+                link: "/lo-que-hacemos/aprender-haciendo"
               }
             ].map((item, index) => (
               <div
                 key={index}
-                className="feature-card border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 rounded-2xl relative"
+                className="feature-card border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 rounded-2xl relative skew-6 hover:skew-0 overflow-hidden"
                 style={{
                   backgroundImage: `url('${item.image}')`,
                   backgroundSize: 'cover',
@@ -75,6 +80,7 @@ export default function HomePage() {
                   backgroundRepeat: 'no-repeat'
                 }}
               >
+                <a href={item.link} className="absolute inset-0 z-10">
                 <Card className="bg-transparent border-0 shadow-none w-full h-full flex items-center justify-center">
                   <div className="feature-card-content bg-transparent">
                     <CardHeader className="p-0 text-center">
@@ -85,6 +91,7 @@ export default function HomePage() {
                     </CardContent>
                   </div>
                 </Card>
+                </a>
               </div>
             ))}
           </div>

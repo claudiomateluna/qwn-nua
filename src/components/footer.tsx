@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { IconoInstagram, IconoFacebook, IconoYoutube, IconoTiktok, IconoGoogle, IconoEmail, IconoWhatsApp } from '@/components/ui/custom-icons';
+import { IconoRRSSInstagram, IconoRRSSFacebook, IconoRRSSYoutube, IconoRRSSTiktok, IconoRRSSGoogle, IconoRRSSEmail, IconoRRSSWhatsApp } from '@/components/ui/custom-icons';
 import UnitSlideShow from './unit-slideshow';
 
 const NuaManaFooter = () => {
@@ -14,7 +14,7 @@ const NuaManaFooter = () => {
           <div className="sm:col-span-2 lg:col-span-1 text-center sm:text-left hidden sm:block">
             <div className="flex justify-center sm:justify-start mb-4">
               <img
-                src="https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/Iconos-logo.svg"
+                src="/images/logos/Iconos-logo.svg"
                 alt="Logo Nua Mana"
                 className="w-auto object-contain"
               />
@@ -29,25 +29,25 @@ const NuaManaFooter = () => {
             {/* Social Media Icons - with justify-between and all requested platforms */}
             <div className="flex justify-between mt-6 max-w-xs mx-auto">
               <a href="https://www.instagram.com/gruponuamana/" target="_blank" rel="noopener noreferrer" className="hover:text-[#ffc41d] transition-colors">
-                <IconoInstagram className="h-8 w-8" strokeWidth={0.2} />
+                <IconoRRSSInstagram className="h-8 w-8" strokeWidth={0.2} />
               </a>
               <a href="https://facebook.com/gruponuamana" target="_blank" rel="noopener noreferrer" className="hover:text-[#ffc41d] transition-colors">
-                <IconoFacebook className="h-8 w-8" strokeWidth={0.2} />
+                <IconoRRSSFacebook className="h-8 w-8" strokeWidth={0.2} />
               </a>
               <a href="https://youtube.com/@gruponuamana" target="_blank" rel="noopener noreferrer" className="hover:text-[#ffc41d] transition-colors">
-                <IconoYoutube className="h-8 w-8" strokeWidth={0.2} />
+                <IconoRRSSYoutube className="h-8 w-8" strokeWidth={0.2} />
               </a>
               <a href="https://www.tiktok.com/@gruponuamana" target="_blank" rel="noopener noreferrer" className="hover:text-[#ffc41d] transition-colors">
-                <IconoTiktok className="h-8 w-8" strokeWidth={0.2} />
+                <IconoRRSSTiktok className="h-8 w-8" strokeWidth={0.2} />
               </a>
               <a href="https://www.google.com/search?q=Guías+y+Scouts+Nua+Mana" target="_blank" rel="noopener noreferrer" className="hover:text-[#ffc41d] transition-colors">
-                <IconoGoogle className="h-8 w-8" strokeWidth={0.2} />
+                <IconoRRSSGoogle className="h-8 w-8" strokeWidth={0.2} />
               </a>
               <a href="mailto:contacto@nuamana.cl" className="hover:text-[#ffc41d] transition-colors">
-                <IconoEmail className="h-8 w-8" strokeWidth={0.2} />
+                <IconoRRSSEmail className="h-8 w-8" strokeWidth={0.2} />
               </a>
               <a href="https://wa.me/56966896001" target="_blank" rel="noopener noreferrer" className="hover:text-[#ffc41d] transition-colors">
-                <IconoWhatsApp className="h-8 w-8" strokeWidth={0.2} />
+                <IconoRRSSWhatsApp className="h-8 w-8" strokeWidth={0.2} />
               </a>
             </div>
           </div>

@@ -18,26 +18,26 @@ const Hero = () => {
 
   // Imágenes para la galería
   const allImages = [
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_01_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_02_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_03_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_04_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_05_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_06_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_07_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_08_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_09_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_10_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_11_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_12_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_13_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_14_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_15_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_16_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_17_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_18_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_19_.webp",
-    "https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/fotos_20_.webp"
+    "/images/fotos/fotos_01_.webp",
+    "/images/fotos/fotos_02_.webp",
+    "/images/fotos/fotos_03_.webp",
+    "/images/fotos/fotos_04_.webp",
+    "/images/fotos/fotos_05_.webp",
+    "/images/fotos/fotos_06_.webp",
+    "/images/fotos/fotos_07_.webp",
+    "/images/fotos/fotos_08_.webp",
+    "/images/fotos/fotos_09_.webp",
+    "/images/fotos/fotos_10_.webp",
+    "/images/fotos/fotos_11_.webp",
+    "/images/fotos/fotos_12_.webp",
+    "/images/fotos/fotos_13_.webp",
+    "/images/fotos/fotos_14_.webp",
+    "/images/fotos/fotos_15_.webp",
+    "/images/fotos/fotos_16_.webp",
+    "/images/fotos/fotos_17_.webp",
+    "/images/fotos/fotos_18_.webp",
+    "/images/fotos/fotos_19_.webp",
+    "/images/fotos/fotos_20_.webp"
   ];
 
   // Colores para las imágenes

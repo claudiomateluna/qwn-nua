@@ -43,7 +43,7 @@ const NuaManaNavbar = () => {
       <div style={{ width: '100%', backgroundColor: 'var(--clr4)' }}>
         <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
           {/* Top bar with social media and contact info - using CSS variables */}
-          <div style={{ color: 'var(--clr1)', padding: '0.5rem 1rem', fontSize: '0.875rem', display: 'none', '@media (min-width: 640px)': { display: 'flex' }, justifyContent: 'space-between' } as React.CSSProperties}>
+          <div className="hidden md:flex" style={{ color: 'var(--clr1)', padding: '0.5rem 1rem', fontSize: '0.875rem', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <span>Síguenos</span>
               <div style={{ display: 'flex', gap: '0.75rem' }}>
@@ -197,12 +197,7 @@ const NuaManaNavbar = () => {
           </header>
           
           {/* Spacer to account for fixed header */}
-          <div style={{ 
-            marginTop: '4rem', 
-            '@media (min-width: 640px)': { 
-              marginTop: isScrolled ? '5rem' : '6rem' 
-            } 
-          } as React.CSSProperties}></div>
+          <div style={{ marginTop: '4rem' }} className={`${isScrolled ? 'md:mt-20' : 'md:mt-24'}`}></div>
         </div>
       </div>
     </>

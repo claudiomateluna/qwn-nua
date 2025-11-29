@@ -106,7 +106,7 @@ const VisitSection = () => {
           {/* Subsección B */}
           <div className="rounded-full flex flex-col items-center overflow-hidden rounded-lg">
             <div className="rounded-full w-50 h-50 flex flex-col items-center bg-gradient-to-r from-[var(--clr8)] to-[var(--clr6)] opacity-90">
-              <div className="relative p-6 text-center bg-[url(https://raw.githubusercontent.com/claudiomateluna/nua_mana/gh-pages/uploads/AndysShow.png)] bg-contain bg-center bg-no-repeat flex items-center justify-center h-50">
+              <div className="relative p-6 text-center bg-[url(/images/inicio/AndysShow.png)] bg-contain bg-center bg-no-repeat flex items-center justify-center h-50">
                 <div className="text-xl font-bold text-white leading-none">VEN A VISITARNOS</div>
               </div>
             </div>

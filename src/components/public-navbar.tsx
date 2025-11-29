@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/modern-button';
 import SidebarDrawer from '@/components/ui/sidebar-drawer';
 import { Menu, Home, LogIn } from 'lucide-react';
-import { IconoInstagram, IconoFacebook, IconoYoutube, IconoTiktok, IconoGoogle, IconoEmail, IconoWhatsApp } from '@/components/ui/custom-icons';
+import { IconoRRSSInstagram, IconoRRSSFacebook, IconoRRSSYoutube, IconoRRSSTiktok, IconoRRSSGoogle, IconoRRSSEmail, IconoRRSSWhatsApp } from '@/components/ui/custom-icons';
 
 const NuaManaPublicNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -77,27 +77,27 @@ const NuaManaPublicNavbar = () => {
               <div className="flex items-center header-rrss">
                 <div className="flex items-center text-white text-sm">Síguenos</div>
                 <a href="https://www.instagram.com/gruponuamana/" target="_blank" rel="noopener noreferrer" className="text-[#fff] hover:text-[#ffc41d] transition-colors">
-                  <IconoInstagram className="w-4 h-4" strokeWidth={0.2} />
+                  <IconoRRSSInstagram className="w-4 h-4" strokeWidth={0.2} />
                 </a>
                 <a href="https://facebook.com/gruponuamana" target="_blank" rel="noopener noreferrer" className="text-[#fff] hover:text-[#ffc41d] transition-colors">
-                  <IconoFacebook className="w-4 h-4" strokeWidth={0.2} />
+                  <IconoRRSSFacebook className="w-4 h-4" strokeWidth={0.2} />
                 </a>
                 <a href="https://youtube.com/@gruponuamana" target="_blank" rel="noopener noreferrer" className="text-[#fff] hover:text-[#ffc41d] transition-colors">
-                  <IconoYoutube className="w-4 h-4" strokeWidth={0.2} />
+                  <IconoRRSSYoutube className="w-4 h-4" strokeWidth={0.2} />
                 </a>
                 <a href="https://tiktok.com/@gruponuamana" target="_blank" rel="noopener noreferrer" className="text-[#fff] hover:text-[#ffc41d] transition-colors">
-                  <IconoTiktok className="w-4 h-4" strokeWidth={0.2} />
+                  <IconoRRSSTiktok className="w-4 h-4" strokeWidth={0.2} />
                 </a>
               </div>
               <div className="flex items-center gap-2">
                 <a href="https://www.google.com/search?q=Guias+y+Scouts+Nua+Mana" target="_blank" rel="noopener noreferrer" className="text-[#fff] hover:text-[#ffc41d] transition-colors">
-                  <IconoGoogle className="w-4 h-4 mr-1 text-[var(--clr8)]" strokeWidth={0.2} />
+                  <IconoRRSSGoogle className="w-4 h-4 mr-1 text-[var(--clr8)]" strokeWidth={0.2} />
                 </a>
                 <a href="mailto:contacto@nuamana.cl" target="_blank" rel="noopener noreferrer" className="text-[#fff] hover:text-[#ffc41d] transition-colors">
-                  <IconoEmail className="w-4 h-4 mr-1 text-[var(--clr8)]" strokeWidth={0.2} />
+                  <IconoRRSSEmail className="w-4 h-4 mr-1 text-[var(--clr8)]" strokeWidth={0.2} />
                 </a>
                 <a href="https://wa.me/+56966896001" target="_blank" rel="noopener noreferrer" className="text-[#fff] hover:text-[#ffc41d] transition-colors">
-                  <IconoWhatsApp className="w-4 h-4 mr-1 text-[var(--clr8)]" strokeWidth={0.2} />
+                  <IconoRRSSWhatsApp className="w-4 h-4 mr-1 text-[var(--clr8)]" strokeWidth={0.2} />
                 </a>
                 <div className="flex items-center text-sm text-[var(--clr8)]">Contactactanos</div>
               </div>

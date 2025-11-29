@@ -72,28 +72,50 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Función para registrarse
   const signup = async (email: string, password: string, firstName: string, lastName: string) => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          first_name: firstName,
-          last_name: lastName
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            first_name: firstName,
+            last_name: lastName
+          },
+          emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`
+        }
+      });
+
+      if (error) {
+        console.error("Signup error:", error);
+        return { error };
+      }
+
+      // If user was created successfully but needs email confirmation
+      if (data.user) {
+        // Update the user profile in the users table
+        const { error: profileError } = await supabase
+          .from('users')
+          .upsert({
+            id: data.user.id,
+            email: data.user.email,
+            first_name: firstName,
+            last_name: lastName,
+            role: 'lobato (a)' // Default role
+          }, {
+            onConflict: 'id'
+          });
+
+        if (profileError) {
+          console.error("Profile creation error:", profileError);
+          return { error: profileError };
         }
       }
-    });
 
-    if (error) {
-      return { error };
+      return { error: null };
+    } catch (err) {
+      console.error("Unexpected signup error:", err);
+      return { error: err as any };
     }
-
-    // Si el usuario se registró exitosamente, intentar iniciar sesión automáticamente
-    if (!error) {
-      // Aquí normalmente se enviaría un correo de confirmación
-      // Por simplicidad, asumiremos que el usuario puede iniciar sesión después del registro
-    }
-
-    return { error };
   };
 
   // Función para cerrar sesión
