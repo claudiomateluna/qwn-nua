@@ -6,10 +6,36 @@ import { Button } from '@/components/ui/modern-button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Navbar from '@/components/navbar';
 import { User, FileText, Package, Coins, FileInput, Trophy } from 'lucide-react';
+import { useEffect } from 'react';
 
 export default function Dashboard() {
   const router = useRouter();
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, loading } = useAuth();
+
+  // Si está cargando la sesión, mostrar un indicador
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-[#ffc41d]"></div>
+      </div>
+    );
+  }
+
+  // Si no hay usuario, redirigir al login
+  useEffect(() => {
+    if (!user && !loading) {
+      router.push('/auth/signin');
+    }
+  }, [user, loading, router]);
+
+  // Si no hay usuario, mostrar un mensaje de carga o null temporalmente
+  if (!user && !loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-[#ffc41d]"></div>
+      </div>
+    );
+  }
 
   const menuItems = [
     {

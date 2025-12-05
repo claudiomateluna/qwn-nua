@@ -62,3 +62,4 @@
 - Follow TypeScript best practices and component patterns used in the project
 
 ## Qwen Added Memories
+- Trabajamos ayer en múltiples mejoras y correcciones para la aplicación de gestión de usuarios para un sistema de escaneo de paquetes, incluyendo jerarquía de roles, seguridad, interfaces, autenticación, políticas de Supabase, verificaciones de permisos, herramientas de diagnóstico, APIs de prueba, detección de dispositivos móviles, cambios estéticos, permisos de roles, login, problemas visuales, sistema completo de detección de dispositivos, cuadro resumen en pantalla de escaneo, favicon, estilos, botón de escáner, documentación, cache, compatibilidad Safari/iOS, jsQR fallback, feedback visual, overlay de enfoque, línea de escaneo animada, carga de locales y experiencia de usuario mejorada. La aplicación ahora funciona correctamente en desktop y dispositivos móviles con soluciones robustas para escaneo de códigos de barras en todos los navegadores.

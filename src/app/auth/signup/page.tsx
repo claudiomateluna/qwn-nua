@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/modern-button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/use-auth';
 import { User } from '@/types';
+import { supabase } from '@/services/supabase';
 import { UserPlus, Mail, Lock, User as UserIcon, ArrowLeft, ArrowRight } from 'lucide-react';
 
 export default function SignUp() {
@@ -47,8 +48,23 @@ export default function SignUp() {
   const [publicFaith, setPublicFaith] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [isRegistering, setIsRegistering] = useState(false); // Loading state for final registration
   const router = useRouter();
   const { signup } = useAuth();
+
+  // Efecto para manejar cambios de rol y saltar pasos no aplicables
+  useEffect(() => {
+    if (step >= 2 && role) { // Si ya se seleccionó un rol
+      // Verificar si el paso actual es aplicable con el rol seleccionado
+      if (!isStepApplicable(step, role)) {
+        // Si el paso actual no es aplicable, encontrar el siguiente paso aplicable
+        const nextApplicableStep = findNextApplicableStep(step, role);
+        if (nextApplicableStep !== step) {
+          setStep(nextApplicableStep);
+        }
+      }
+    }
+  }, [role, step]);
 
   // Funciones auxiliares para manejar los arrays
   const addPupil = () => {
@@ -109,6 +125,95 @@ export default function SignUp() {
       return false;
     }
     return true;
+  };
+
+  // Función para determinar si un paso es aplicable según el rol seleccionado
+  const isStepApplicable = (stepNumber: number, currentRole: string) => {
+    switch(stepNumber) {
+      case 1: // Contraseña de autorización - siempre aplicable
+        return true;
+      case 2: // Selección de rol - siempre aplicable
+        return true;
+      case 3: // Nombre y apellido - siempre aplicable
+        return true;
+      case 4: // RUT - siempre aplicable
+        return true;
+      case 5: // Teléfono - siempre aplicable
+        return true;
+      case 6: // Fecha de nacimiento - siempre aplicable
+        return true;
+      case 7: // Email personal - siempre aplicable
+        return true;
+      case 8: // Dirección y comuna - siempre aplicable
+        return true;
+      case 9: // Sexo - siempre aplicable
+        return true;
+      case 10: // Religión - siempre aplicable
+        return true;
+      case 11: // Información Scout
+        return currentRole !== 'apoderado';
+      case 12: // Información Escolar
+        return currentRole !== 'apoderado' && currentRole !== 'dirigente' && currentRole !== 'admin';
+      case 13: // Información del Apoderado
+        return currentRole !== 'apoderado' && currentRole !== 'dirigente' && currentRole !== 'admin';
+      case 14: // Información de Pupilos
+        return currentRole === 'apoderado' || currentRole === 'dirigente';
+      case 15: // Contactos de Emergencia
+        return currentRole !== 'apoderado';
+      case 16: // Sistema de Salud
+        return currentRole !== 'apoderado';
+      case 17: // Tipo de Sangre
+        return currentRole !== 'apoderado';
+      case 18: // Alergias
+        return currentRole !== 'apoderado';
+      case 19: // Antecedentes Médicos
+        return currentRole !== 'apoderado';
+      case 20: // Tratamientos Médicos
+        return currentRole !== 'apoderado';
+      case 21: // Medicamentos
+        return currentRole !== 'apoderado';
+      case 22: // Restricciones Dietéticas
+        return currentRole !== 'apoderado';
+      case 23: // Autorización de Fotografías - siempre aplicable
+        return true;
+      case 24: // Fe Pública - siempre aplicable
+        return true;
+      case 25: // Contraseña de Cuenta - siempre aplicable
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  // Función para encontrar el siguiente paso aplicable
+  const findNextApplicableStep = (currentStep: number, currentRole: string) => {
+    for (let step = currentStep + 1; step <= 25; step++) {
+      if (isStepApplicable(step, currentRole)) {
+        return step;
+      }
+    }
+    return 25; // Si no hay más pasos aplicables, ir al último
+  };
+
+  // Función para encontrar el paso anterior aplicable
+  const findPrevApplicableStep = (currentStep: number, currentRole: string) => {
+    for (let step = currentStep - 1; step >= 1; step--) {
+      if (isStepApplicable(step, currentRole)) {
+        return step;
+      }
+    }
+    return 1; // Si no hay pasos anteriores aplicables, ir al primero
+  };
+
+  // Función para contar el número total de pasos aplicables para un rol
+  const getTotalStepsForRole = (currentRole: string) => {
+    let count = 0;
+    for (let i = 1; i <= 25; i++) {
+      if (isStepApplicable(i, currentRole)) {
+        count++;
+      }
+    }
+    return count;
   };
 
   // Function to validate Chilean RUT
@@ -516,144 +621,120 @@ export default function SignUp() {
 
   const handleNextStep = () => {
     setError('');
+    let shouldProceed = false;
+
+    // Validar el paso actual
     switch (step) {
       case 1:
-        if (validateStep1()) {
-          setStep(2);
-        }
+        shouldProceed = validateStep1();
         break;
       case 2:
-        if (validateStep2()) {
-          setStep(3);
-        }
+        shouldProceed = validateStep2();
         break;
       case 3:
-        if (validateStep3()) {
-          setStep(4);
-        }
+        shouldProceed = validateStep3();
         break;
       case 4:
-        if (validateStep4()) {
-          setStep(5);
-        }
+        shouldProceed = validateStep4();
         break;
       case 5:
-        if (validateStep5()) {
-          setStep(6);
-        }
+        shouldProceed = validateStep5();
         break;
       case 6:
-        if (validateStep6()) {
-          setStep(7);
-        }
+        shouldProceed = validateStep6();
         break;
       case 7:
-        if (validateStep7()) {
-          setStep(8);
-        }
+        shouldProceed = validateStep7();
         break;
       case 8:
-        if (validateStep8()) {
-          setStep(9);
-        }
+        shouldProceed = validateStep8();
         break;
       case 9:
-        if (validateStep9()) {
-          setStep(10);
-        }
+        shouldProceed = validateStep9();
         break;
       case 10:
-        if (validateStep10()) {
-          setStep(11);
-        }
+        shouldProceed = validateStep10();
         break;
       case 11:
-        if (validateStep11()) {
-          setStep(12);
-        }
+        shouldProceed = validateStep11();
         break;
       case 12:
-        if (validateStep12()) {
-          setStep(13);
-        }
+        shouldProceed = validateStep12();
         break;
       case 13:
-        if (validateStep13()) {
-          setStep(14);
-        }
+        shouldProceed = validateStep13();
         break;
       case 14:
-        if (validateStep14()) {
-          setStep(15);
-        }
+        shouldProceed = validateStep14();
         break;
       case 15:
-        if (validateStep15()) {
-          setStep(16);
-        }
+        shouldProceed = validateStep15();
         break;
       case 16:
-        if (validateStep16()) {
-          setStep(17);
-        }
+        shouldProceed = validateStep16();
         break;
       case 17:
-        if (validateStep17()) {
-          setStep(18);
-        }
+        shouldProceed = validateStep17();
         break;
       case 18:
-        if (validateStep18()) {
-          setStep(19);
-        }
+        shouldProceed = validateStep18();
         break;
       case 19:
-        if (validateStep19()) {
-          setStep(20);
-        }
+        shouldProceed = validateStep19();
         break;
       case 20:
-        if (validateStep20()) {
-          setStep(21);
-        }
+        shouldProceed = validateStep20();
         break;
       case 21:
-        if (validateStep21()) {
-          setStep(22);
-        }
+        shouldProceed = validateStep21();
         break;
       case 22:
-        if (validateStep22()) {
-          setStep(23);
-        }
+        shouldProceed = validateStep22();
         break;
       case 23:
-        if (validateStep23()) {
-          setStep(24);
-        }
+        shouldProceed = validateStep23();
         break;
       case 24:
-        if (validateStep24()) {
-          setStep(25);
-        }
+        shouldProceed = validateStep24();
         break;
       case 25:
-        if (validateStep25()) {
+        shouldProceed = validateStep25();
+        if (shouldProceed) {
           handleFinalSubmit();
         }
         break;
+    }
+
+    if (shouldProceed && step < 25) {
+      // Encontrar el siguiente paso aplicable
+      const nextStep = findNextApplicableStep(step, role);
+      setStep(nextStep);
     }
   };
 
   const handlePrevStep = () => {
     if (step > 1) {
-      const newStep = step - 1;
-      setStep(newStep);
+      // Encontrar el paso anterior aplicable
+      const prevStep = findPrevApplicableStep(step, role);
+      setStep(prevStep);
       setError(''); // Clear error when going back
     }
   };
 
+  // Function to handle Enter key press in input fields
+  const handleKeyDown = (e: React.KeyboardEvent, nextAction?: () => void) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (nextAction) {
+        nextAction();
+      }
+    }
+  };
+
   const handleFinalSubmit = async () => {
+    setIsRegistering(true); // Set loading state
+    setError(''); // Clear previous errors
+
     try {
       // Para roles que no entran al paso de contraseña, generar una contraseña temporal
       let finalPassword = password;
@@ -662,21 +743,233 @@ export default function SignUp() {
         finalPassword = Math.random().toString(36).slice(-8) + 'Temp!'; // 8 caracteres + símbolo
       }
 
-      // Usar el email personal para el registro en Supabase
-      const result = await signup(personalEmail, finalPassword, firstName, lastName);
+      // Primero, crear el usuario en Supabase Auth
+      const result = await signup(personalEmail, finalPassword, firstName, lastName, rut);
 
       if (result.error) {
         setError(result.error.message || 'Error al crear la cuenta');
+        setIsRegistering(false); // Reset loading state
         return;
       }
 
-      // Guardar información adicional (RUT, teléfono, etc.) en la base de datos
-      // Esto se puede hacer a través de una llamada a una API o directamente con Supabase
+      // Esperar un poco para asegurar que la sesión esté disponible
+      await new Promise(resolve => setTimeout(resolve, 800)); // Aumentamos el tiempo de espera
+
+      // Get the current session to obtain the newly created user's ID
+      const { data: { session } } = await supabase.auth.getSession();
+      const userId = session?.user?.id;
+
+      // Si no se obtiene el userId, intentar obtenerlo directamente del auth
+      let actualUserId = userId;
+      if (!actualUserId) {
+        // Intentar obtener el userId del estado de autenticación
+        const { data: { user } } = await supabase.auth.getUser();
+        actualUserId = user?.id;
+      }
+
+      // Si después de todos los intentos no hay userId, intentar crear el perfil más tarde
+      if (!actualUserId) {
+        console.error('No se pudo obtener el ID del usuario después del registro');
+        // Continuar al dashboard pero intentar crear el perfil en el fondo
+        // Esto podría hacerse con un webhook o una función que cree el perfil cuando esté disponible el userId
+        router.push('/dashboard');
+        router.refresh();
+
+        // Intentar crear el perfil en segundo plano después de un tiempo
+        const backgroundTimeout = setTimeout(async () => {
+          try {
+            console.log('Intentando crear perfil en segundo plano...');
+
+            // Intentar refrescar la sesión y obtener el usuario
+            // Primero intentamos con getSession
+            const { data: { session: newSession }, error: sessionError } = await supabase.auth.getSession();
+            console.log('Sesión obtenida:', newSession, 'Error:', sessionError);
+
+            // Si getSession no funciona, intentar getUser directamente
+            let newUserID = newSession?.user?.id;
+            if (!newUserID) {
+              const { data: { user }, error: userError } = await supabase.auth.getUser();
+              console.log('Usuario obtenido directamente:', user, 'Error:', userError);
+              newUserID = user?.id;
+            }
+
+            console.log('UserID obtenido en segundo plano:', newUserID);
+
+            if (newUserID) {
+              console.log('Enviando datos del perfil para el usuario:', newUserID);
+              const profileResponse = await fetch('/api/user-profile', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  userId: newUserID,
+                  email: personalEmail,
+                  firstName,
+                  paternalLastName: lastName,
+                  maternalLastName: '',
+                  rut,
+                  role: role || 'admin',
+                  birth_date: birthDate,
+                  gender: sex,
+                  phone_number: phone,
+                  address,
+                  commune,
+                  unit: scoutUnit,
+                  religious_preference: religion,
+                  school,
+                  field_of_study: educationLevel,
+                  health_system: healthSystem,
+                  blood_type: bloodType,
+                  dietary_needs: dietaryRestrictions?.join(', '),
+                  allergies,
+                  medical_history: medicalHistory,
+                  current_treatments: medicalTreatments,
+                  medication_use: medications,
+                  guardian_id: guardianName,
+                  emergency_contacts: emergencyContacts,
+                  scout_group: scoutGroup,
+                  photo_authorization: photoAuthorization,
+                  public_faith_data: publicFaith
+                }),
+              });
+
+              console.log('Respuesta del perfil:', profileResponse.status);
+              const profileResult = await profileResponse.json();
+              console.log('Resultado del perfil:', profileResult);
+
+              if (!profileResponse.ok) {
+                console.error('Error creando perfil en segundo plano:', profileResult.error);
+              } else {
+                console.log('Perfil creado exitosamente en segundo plano');
+              }
+            } else {
+              console.error('No se pudo obtener el userID en el intento en segundo plano');
+              console.log('Reintentando en 5 segundos...');
+
+              // Hacer un nuevo intento después de 5 segundos
+              setTimeout(async () => {
+                try {
+                  // Intentar otra vez después de más tiempo
+                  await supabase.auth.refreshSession();
+                  const { data: { user } } = await supabase.auth.getUser();
+                  const retryUserID = user?.id;
+
+                  if (retryUserID) {
+                    console.log('Retry: Enviando datos del perfil para el usuario:', retryUserID);
+                    const retryProfileResponse = await fetch('/api/user-profile', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        userId: retryUserID,
+                        email: personalEmail,
+                        firstName,
+                        paternalLastName: lastName,
+                        maternalLastName: '',
+                        rut,
+                        role: role || 'admin',
+                        birth_date: birthDate,
+                        gender: sex,
+                        phone_number: phone,
+                        address,
+                        commune,
+                        unit: scoutUnit,
+                        religious_preference: religion,
+                        school,
+                        field_of_study: educationLevel,
+                        health_system: healthSystem,
+                        blood_type: bloodType,
+                        dietary_needs: dietaryRestrictions?.join(', '),
+                        allergies,
+                        medical_history: medicalHistory,
+                        current_treatments: medicalTreatments,
+                        medication_use: medications,
+                        guardian_id: guardianName,
+                        emergency_contacts: emergencyContacts,
+                        scout_group: scoutGroup,
+                        photo_authorization: photoAuthorization,
+                        public_faith_data: publicFaith
+                      }),
+                    });
+
+                    const retryResult = await retryProfileResponse.json();
+                    console.log('Retry respuesta del perfil:', retryProfileResponse.status);
+                    console.log('Retry resultado del perfil:', retryResult);
+
+                    if (!retryProfileResponse.ok) {
+                      console.error('Error en retry creando perfil en segundo plano:', retryResult.error);
+                    } else {
+                      console.log('Perfil creado exitosamente en retry');
+                    }
+                  } else {
+                    console.error('Incluso en retry no se pudo obtener el userID');
+                  }
+                } catch (retryError) {
+                  console.error('Error en retry de creación de perfil:', retryError);
+                }
+              }, 5000); // Reintentar después de 5 segundos
+            }
+          } catch (error) {
+            console.error('Error en la creación de perfil en segundo plano:', error);
+          }
+        }, 2000); // Intentar de nuevo después de 2 segundos
+
+        return;
+      }
+
+      // Luego, crear el perfil de usuario en la tabla users a través de la API
+      // usando el service role para evitar problemas de RLS
+      const profileResponse = await fetch('/api/user-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: actualUserId,
+          email: personalEmail,
+          firstName,
+          paternalLastName: lastName,  // Assuming lastName is paternal name, split happens in signup function
+          maternalLastName: '',        // This would come from a separate field in the form
+          rut,
+          role: role || 'admin',
+          birth_date: birthDate,
+          gender: sex,
+          phone_number: phone,
+          address,
+          commune,
+          unit: scoutUnit,
+          religious_preference: religion,
+          school,
+          field_of_study: educationLevel,
+          health_system: healthSystem,
+          blood_type: bloodType,
+          dietary_needs: dietaryRestrictions?.join(', '),
+          allergies,
+          medical_history: medicalHistory,
+          current_treatments: medicalTreatments,
+          medication_use: medications,
+          guardian_id: guardianName,
+          emergency_contacts: emergencyContacts,
+          scout_group: scoutGroup,
+          photo_authorization: photoAuthorization,
+          public_faith_data: publicFaith
+        }),
+      });
+
+      const profileResult = await profileResponse.json();
+
+      if (!profileResponse.ok) {
+        console.error("Profile creation error:", profileResult.error);
+        // Still allow the user to proceed even if profile creation fails
+      }
 
       router.push('/dashboard');
       router.refresh();
     } catch (err: any) {
       setError(err.message || 'Error al crear la cuenta');
+      setIsRegistering(false); // Reset loading state
     }
   };
 
@@ -708,25 +1001,16 @@ export default function SignUp() {
                 />
               </div>
 
-              {/* Step indicator */}
-              <div className="flex justify-center mb-3 sm:mb-4">
-                {Array.from({ length: 25 }, (_, i) => i + 1).map((s) => (
-                  <div key={s} className="flex items-center">
-                    <div
-                      className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center
-                        ${step >= s ? 'bg-(--clr8) text-(--clr5)' : 'bg-(--clr8)/30 text-white'}`}
-                    >
-                      {s}
-                    </div>
-                    {s < 25 && (
-                      <div className={`w-4 h-0.5 sm:w-8 ${step > s ? 'bg-(--clr8)' : 'bg-(--clr8)/30'}`}></div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
               <h1 className="text-lg sm:text-xl md:text-2xl font-bold">¡Únete a la Aventura!</h1>
-              <p className="mt-1 sm:mt-2 opacity-80 text-sm">Registro en {step}/25 pasos</p>
+              <p className="mt-1 sm:mt-2 opacity-80 text-sm">Paso {role ? (() => {
+                let count = 0;
+                for (let i = 1; i <= step; i++) {
+                  if (isStepApplicable(i, role)) {
+                    count++;
+                  }
+                }
+                return count;
+              })() : step} de {role ? getTotalStepsForRole(role) : 25}</p>
             </div>
 
             <CardContent className="p-2 sm:p-2">
@@ -736,7 +1020,16 @@ export default function SignUp() {
                   <div
                     className="h-2 rounded-full transition-all duration-300"
                     style={{
-                      width: `${(step - 1) * (100 / 24)}%`,  // 100 / 24 ≈ 4.17% por paso (ya que son 25 pasos, hay 24 intervalos)
+                      width: `${role ? (() => {
+                        let stepPosition = 0;
+                        for (let i = 1; i <= step; i++) {
+                          if (isStepApplicable(i, role)) {
+                            stepPosition++;
+                          }
+                        }
+                        const totalSteps = getTotalStepsForRole(role);
+                        return totalSteps > 0 ? (stepPosition - 1) * (100 / (totalSteps - 1)) : 0;
+                      })() : (step - 1) * (100 / 24)}%`,
                       background: 'linear-gradient(to right, var(--clr5), var(--clr7))'
                     }}
                   ></div>
@@ -758,6 +1051,7 @@ export default function SignUp() {
                       type="password"
                       value={authPassword}
                       onChange={(e) => setAuthPassword(e.target.value)}
+                      onKeyDown={(e) => handleKeyDown(e, handleNextStep)}
                       className="h-12 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Ingresa la contraseña"
                     />
@@ -871,6 +1165,7 @@ export default function SignUp() {
                           id="firstName"
                           value={firstName}
                           onChange={(e) => setFirstName(e.target.value)}
+                          onKeyDown={(e) => handleKeyDown(e, handleNextStep)}
                           className="pl-10 h-12 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           placeholder="Tu nombre"
                         />
@@ -883,6 +1178,7 @@ export default function SignUp() {
                         id="lastName"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
+                        onKeyDown={(e) => handleKeyDown(e, handleNextStep)}
                         className="h-12 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         placeholder="Tu apellido"
                       />
@@ -1074,6 +1370,7 @@ export default function SignUp() {
                         placeholder="tu@email.com"
                         value={personalEmail}
                         onChange={(e) => setPersonalEmail(e.target.value)}
+                        onKeyDown={(e) => handleKeyDown(e, handleNextStep)}
                         className="pl-10 h-12 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
@@ -1306,6 +1603,7 @@ export default function SignUp() {
                         const formattedValue = formatRut(e.target.value);
                         setRut(formattedValue);
                       }}
+                      onKeyDown={(e) => handleKeyDown(e, handleNextStep)}
                       className="h-12 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="12345678-9"
                     />
@@ -2587,6 +2885,7 @@ export default function SignUp() {
                           placeholder="Crea una contraseña"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
+                          onKeyDown={(e) => handleKeyDown(e, handleFinalSubmit)}
                           className="pl-10 h-12 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       </div>
@@ -2604,6 +2903,7 @@ export default function SignUp() {
                           placeholder="Confirma tu contraseña"
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
+                          onKeyDown={(e) => handleKeyDown(e, handleFinalSubmit)}
                           className="pl-10 h-12 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       </div>
@@ -2638,9 +2938,10 @@ export default function SignUp() {
                       className="w-full sm:w-auto flex-1"
                       style={{ background: 'linear-gradient(to right, var(--clr5), var(--clr7))', border: 'none' }}
                       size="lg"
-                      onClick={handleNextStep}
+                      onClick={handleFinalSubmit}
+                      disabled={isRegistering}
                     >
-                      Finalizar Registro <ArrowRight className="ml-2 h-4 w-4" />
+                      {isRegistering ? 'Registrando usuario...' : 'Finalizar Registro'} <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </div>
                 </div>

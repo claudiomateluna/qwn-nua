@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/modern-button';
 import { Menu, Home, User, FileText, Package, Coins, FileInput, Trophy, LogOut, MessageCircle, Instagram, Facebook, Youtube, LogIn } from 'lucide-react';
+import { IconoRRSSInstagram, IconoRRSSFacebook, IconoRRSSYoutube, IconoRRSSTiktok, IconoRRSSGoogle, IconoRRSSEmail, IconoRRSSWhatsApp } from '@/components/ui/custom-icons';
 import SidebarDrawer from '@/components/ui/sidebar-drawer';
 
 const NuaManaNavbar = () => {
@@ -60,7 +61,7 @@ const NuaManaNavbar = () => {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <a href="mailto:contacto@nuamana.cl" style={{ color: 'var(--clr7)', transition: 'color 0.3s' }}>
-                CONTACTO@NUAMANA.CL
+                Email
               </a>
               <a href="https://wa.me/+56966896001" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', color: 'var(--clr7)', transition: 'color 0.3s' }}>
                 <MessageCircle width={16} height={16} style={{ marginRight: '0.25rem' }} />
@@ -126,13 +127,17 @@ const NuaManaNavbar = () => {
                         {profile.first_name}
                       </Button>
                       <Button
-                        variant="outline"
+                        variant="default"
                         size="sm"
-                        style={{ 
-                          border: '1px solid var(--clr7)', 
-                          color: 'var(--clr7)',
+                        style={{
+                          backgroundColor: 'black',
+                          color: 'white',
+                          border: '1px solid black',
                         } as React.CSSProperties}
-                        onClick={signOut}
+                        onClick={() => {
+                          // Redirigir a la página de signout para manejar el cierre de sesión
+                          window.location.href = '/auth/signout';
+                        }}
                       >
                         Salir
                       </Button>
@@ -141,7 +146,7 @@ const NuaManaNavbar = () => {
                     <Button
                       variant="secondary"
                       size="sm"
-                      onClick={() => router.push('/auth/signin')}
+                      onClick={() => router.push('/auth/signout')}
                       style={{ 
                         backgroundColor: 'var(--clr7)', 
                         color: 'var(--clr4)',
@@ -150,7 +155,7 @@ const NuaManaNavbar = () => {
                       } as React.CSSProperties}
                     >
                       <LogIn width={16} height={16} style={{ marginRight: '0.5rem' }} />
-                      Acceder
+                      Salir
                     </Button>
                   )}
                 </div>

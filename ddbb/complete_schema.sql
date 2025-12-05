@@ -397,15 +397,55 @@ CREATE POLICY leader_can_see_unit_users ON users
         AND unit = (SELECT unit FROM users WHERE id = auth.uid())
     );
 
--- Solo admins y dirigentes pueden crear/actualizar usuarios
+-- Solo admins y dirigentes pueden actualizar usuarios existentes
 CREATE POLICY admin_manage_users ON users
-    FOR ALL TO authenticated
+    FOR UPDATE TO authenticated
     USING (
         (SELECT role FROM users WHERE id = auth.uid()) IN ('admin', 'dirigente', 'representante')
     )
     WITH CHECK (
         (SELECT role FROM users WHERE id = auth.uid()) IN ('admin', 'dirigente', 'representante')
     );
+
+-- Solo admins y dirigentes pueden eliminar usuarios
+CREATE POLICY admin_delete_users ON users
+    FOR DELETE TO authenticated
+    USING (
+        (SELECT role FROM users WHERE id = auth.uid()) IN ('admin', 'dirigente', 'representante')
+    );
+
+-- Política para permitir inserción de perfiles de usuarios nuevos
+-- Esta política permite que cuentas autenticadas inserten su propio perfil
+CREATE POLICY user_insert_own_profile_policy ON users
+    FOR INSERT TO authenticated
+    WITH CHECK (id = auth.uid());
+
+-- Alternativamente, podemos crear un trigger para manejar la creación automática de perfiles
+-- Función para crear perfil de usuario automáticamente
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  INSERT INTO public.users (id, first_name, paternal_last_name, maternal_last_name, email, role)
+  VALUES (
+    NEW.id,
+    NEW.raw_user_meta_data->>'first_name',
+    NEW.raw_user_meta_data->>'paternal_last_name',
+    NEW.raw_user_meta_data->>'maternal_last_name',
+    NEW.email,
+    'lobato (a)' -- rol por defecto
+  );
+  RETURN NEW;
+END;
+$$;
+
+-- Asociar el trigger a la tabla de autenticación
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- Políticas para la relación user_guardians
 CREATE POLICY user_guardians_select_policy ON user_guardians

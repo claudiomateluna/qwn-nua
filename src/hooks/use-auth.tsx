@@ -14,8 +14,8 @@ interface AuthContextType {
   user: SupabaseUser | null;
   profile: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<{ error: any }>;
-  signup: (email: string, password: string, firstName: string, lastName: string) => Promise<{ error: any }>;
+  login: (rut: string, password: string) => Promise<{ error: any }>;
+  signup: (email: string, password: string, firstName: string, lastName: string, rut?: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: any }>;
 }
@@ -60,26 +60,60 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     checkSession();
   }, []);
 
-  // Función para iniciar sesión
-  const login = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
+  // Función para iniciar sesión con RUT
+  const login = async (rut: string, password: string) => {
+    // Primero, buscar al usuario por RUT en la tabla personalizada
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('id, email')
+      .eq('rut', rut)
+      .single();
+
+    if (userError || !userData) {
+      // Para evitar revelar si el usuario existe o no, mostramos un mensaje genérico
+      return { error: new Error('RUT o contraseña incorrectos') };
+    }
+
+    // Usar el email encontrado para iniciar sesión con Supabase
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email: userData.email,
       password,
     });
 
-    return { error };
+    if (authError) {
+      // Si el usuario existe pero la contraseña es incorrecta, también mostramos mensaje genérico
+      return { error: new Error('RUT o contraseña incorrectos') };
+    }
+
+    return { error: null };
   };
 
   // Función para registrarse
-  const signup = async (email: string, password: string, firstName: string, lastName: string) => {
+  const signup = async (email: string, password: string, firstName: string, lastName: string, rut?: string) => {
     try {
+      // Dividir el apellido en paternal y maternal si es necesario
+      let paternalLastName = '';
+      let maternalLastName = '';
+
+      // Dividir el apellido en dos partes si hay un espacio
+      if (lastName) {
+        const nameParts = lastName.trim().split(' ');
+        if (nameParts.length === 1) {
+          paternalLastName = nameParts[0];
+        } else if (nameParts.length >= 2) {
+          paternalLastName = nameParts[0];
+          maternalLastName = nameParts.slice(1).join(' ');
+        }
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
             first_name: firstName,
-            last_name: lastName
+            paternal_last_name: paternalLastName,
+            maternal_last_name: maternalLastName
           },
           emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`
         }
@@ -90,26 +124,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { error };
       }
 
-      // If user was created successfully but needs email confirmation
-      if (data.user) {
-        // Update the user profile in the users table
-        const { error: profileError } = await supabase
-          .from('users')
-          .upsert({
-            id: data.user.id,
-            email: data.user.email,
-            first_name: firstName,
-            last_name: lastName,
-            role: 'lobato (a)' // Default role
-          }, {
-            onConflict: 'id'
-          });
-
-        if (profileError) {
-          console.error("Profile creation error:", profileError);
-          return { error: profileError };
-        }
-      }
+      // El perfil de usuario ahora se crea en la página de registro
+      // para evitar problemas de sesión y RLS durante el proceso de registro
 
       return { error: null };
     } catch (err) {

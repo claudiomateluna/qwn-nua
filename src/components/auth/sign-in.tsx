@@ -10,22 +10,32 @@ import { useAuth } from '@/hooks/use-auth';
 import { Lock, Mail } from 'lucide-react';
 
 export default function SignIn() {
-  const [email, setEmail] = useState('');
+  const [rut, setRut] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    
-    try {
-      await login(email, password);
+
+    // Evitar envíos múltiples
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setError(''); // Limpiar error anterior
+
+    // Login function returns an object with error property
+    const result = await login(rut, password);
+
+    if (result.error) {
+      // Mostrar mensaje de error específico
+      setError(result.error.message || 'RUT o contraseña incorrectos');
+      setIsSubmitting(false);
+    } else {
       router.push('/dashboard');
       router.refresh();
-    } catch (err: any) {
-      setError(err.message || 'Error al iniciar sesión');
     }
   };
 
@@ -64,17 +74,17 @@ export default function SignIn() {
               <form onSubmit={handleSubmit}>
                 <div className="space-y-6">
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-gray-700 font-medium">Correo Electrónico</Label>
+                    <Label htmlFor="rut" className="text-gray-700 font-medium">RUT</Label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <Mail className="h-5 w-5 text-gray-400" />
                       </div>
                       <Input
-                        id="email"
-                        type="email"
-                        placeholder="tu@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        id="rut"
+                        type="text"
+                        placeholder="12.345.678-9"
+                        value={rut}
+                        onChange={(e) => setRut(e.target.value)}
                         required
                         className="pl-10 h-12 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
@@ -99,13 +109,13 @@ export default function SignIn() {
                   </div>
 
                   {error && (
-                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-center">
+                    <div key={`error-${Date.now()}`} className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-center">
                       {error}
                     </div>
                   )}
 
-                  <Button type="submit" className="w-full" size="xl" variant="gradient-primary">
-                    Iniciar Sesión
+                  <Button type="submit" className="w-full" size="xl" variant="gradient-primary" disabled={isSubmitting}>
+                    {isSubmitting ? 'Iniciando sesión...' : 'Iniciar Sesión'}
                   </Button>
 
                   <div className="text-center text-sm text-gray-600 pt-2">
